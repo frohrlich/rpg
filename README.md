@@ -8,6 +8,7 @@ git commit -m "Commentaire"
 git push
 ```
 
+git
 Pour récupérer les données d'un autre :
 
 ```
