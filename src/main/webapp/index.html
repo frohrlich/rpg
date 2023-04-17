@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test Canvas Websocket</title>
+<script type="text/javascript" src="websocket.js" defer></script>
+<script type="text/javascript" src="script.js" defer></script>
+</head>
+<body>
+	<form>
+		<input id="message" type="text">
+		<input onclick="wsSendMessage();" value="Echo" type="button"> 
+		<input onclick="wsCloseConnection();" value="Disconnect" type="button">
+	</form>
+	<textarea id="echoText" rows="5" cols="30"></textarea>
+</body>
+</html>
