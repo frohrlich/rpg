@@ -23,11 +23,11 @@ public  abstract class PersonnageEntity {
 	@Column(name="nom", length=255, nullable=false)
 	private String nom;
 	
-	@Column(name="sexe", length=2, nullable=false)
-	private String sexe;
+	@Column(name="sexe", length=255, nullable=false)
+	private Sexe sexe;
 	
-	@Column(name="classe", length=255, nullable=false)
-	private String classe;
+	@Column(name="role", length=255, nullable=false)
+	private Role role;
 	
 	@Column(name="niveau", nullable=false)
 	private int niveau;
@@ -80,20 +80,20 @@ public  abstract class PersonnageEntity {
 		this.nom = nom;
 	}
 
-	public String getSexe() {
+	public Sexe getSexe() {
 		return sexe;
 	}
 
-	public void setSexe(String sexe) {
+	public void setSexe(Sexe sexe) {
 		this.sexe = sexe;
 	}
 
-	public String getClasse() {
-		return classe;
+	public Role getRole() {
+		return role;
 	}
 
-	public void setClasse(String classe) {
-		this.classe = classe;
+	public void setRole(Role role) {
+		this.role = role;
 	}
 
 	public int getNiveau() {
@@ -156,13 +156,13 @@ public  abstract class PersonnageEntity {
 
 	public PersonnageEntity() {}
 
-	public PersonnageEntity(int inventaireId, int dialogueId, String nom, String sexe, String classe, int niveau,
+	public PersonnageEntity(int inventaireId, int dialogueId, String nom, Sexe sexe, Role role, int niveau,
 			int pv, int pvMax, int forcePersonnage, int agilite, int defense, int argent) {
 		this.setInventaireId(inventaireId);
 		this.setDialogueId(dialogueId);
 		this.setNom(nom);
 		this.setSexe(sexe);
-		this.setClasse(classe);
+		this.setRole(role);
 		this.setNiveau(niveau);
 		this.setPv(pv);
 		this.setPvMax(pvMax);

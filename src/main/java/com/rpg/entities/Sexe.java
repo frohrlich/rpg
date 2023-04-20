@@ -2,7 +2,7 @@ package com.rpg.entities;
 
 public enum Sexe  {
 	M("Masculin"),
-	F("Feminin");
+	F("Féminin");
 	
 	private String sexe;
 	
