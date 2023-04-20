@@ -171,5 +171,23 @@ public  abstract class PersonnageEntity {
 		this.setDefense(defense);
 		this.setArgent(argent);
 	}
+
+	@Override
+	public String toString() {
+		return "PersonnageEntity [id=" + id 
+				+ ", inventaireId=" + inventaireId 
+				+ ", dialogueId=" + dialogueId 
+				+ ", nom=" + nom 
+				+ ", sexe=" + sexe 
+				+ ", role=" + role 
+				+ ", niveau=" + niveau 
+				+ ", pv=" + pv 
+				+ ", pvMax=" + pvMax
+				+ ", forcePersonnage=" + forcePersonnage 
+				+ ", agilite=" + agilite 
+				+ ", defense=" + defense 
+				+ ", argent=" + argent 
+				+ "]";
+	}
 	
 }
