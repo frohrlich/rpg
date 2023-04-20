@@ -89,7 +89,7 @@ public class JoueurDAO {
 			joueurToUpdate.setDialogueId(joueur.getDialogueId());
 			joueurToUpdate.setNom(joueur.getNom());
 			joueurToUpdate.setSexe(joueur.getSexe());
-			joueurToUpdate.setClasse(joueur.getClasse());
+			joueurToUpdate.setRole(joueur.getRole());
 			joueurToUpdate.setNiveau(joueur.getNiveau());
 			joueurToUpdate.setPv(joueur.getPv());
 			joueurToUpdate.setPvMax(joueur.getPvMax());

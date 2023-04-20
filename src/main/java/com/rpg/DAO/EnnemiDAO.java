@@ -89,7 +89,7 @@ public class EnnemiDAO {
 			ennemiToUpdate.setDialogueId(ennemi.getDialogueId());
 			ennemiToUpdate.setNom(ennemi.getNom());
 			ennemiToUpdate.setSexe(ennemi.getSexe());
-			ennemiToUpdate.setClasse(ennemi.getClasse());
+			ennemiToUpdate.setRole(ennemi.getRole());
 			ennemiToUpdate.setNiveau(ennemi.getNiveau());
 			ennemiToUpdate.setPv(ennemi.getPv());
 			ennemiToUpdate.setPvMax(ennemi.getPvMax());

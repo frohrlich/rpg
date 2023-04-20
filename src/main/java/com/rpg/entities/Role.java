@@ -2,9 +2,9 @@ package com.rpg.entities;
 
 public enum Role {
 
-	Epeiste,
-	Archer,
-	Magicien; 
+	Ep("Epeiste"),
+	Ar("Archer"),
+	Ma("Magicien"); 
 	
 	Role() {}  
 	
