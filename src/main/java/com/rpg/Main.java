@@ -2,6 +2,8 @@ package com.rpg;
 
 import com.rpg.DAO.JoueurDAO;
 import com.rpg.entities.JoueurEntity;
+import com.rpg.entities.Role;
+import com.rpg.entities.Sexe;
 
 public class Main {
 
@@ -20,14 +22,14 @@ public class Main {
 
 		Connexion conn = Connexion.getInstance();
 		
-		JoueurEntity joueur = new JoueurEntity(2, 3, "Lalaina", "F", "fée", 150, 1280, 2280, 300, 300, 2000, 3000000,
+		JoueurEntity joueur = new JoueurEntity(2, 3, "Lalaina", Sexe.F, Role.Ep , 150, 1280, 2280, 300, 300, 2000, 3000000,
 				1000);
 		
 		JoueurDAO dao = new JoueurDAO();
 		
-		// dao.create(joueur);
+		dao.create(joueur);
 		
-		System.out.println(dao.update(2, joueur));
+		//System.out.println(dao.update(2, joueur));
 	}
 
 }

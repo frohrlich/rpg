@@ -13,9 +13,9 @@ public class PnjEntity extends PersonnageEntity {
 		super();
 	}
 
-	public PnjEntity(int inventaireId, int dialogueId, String nom, String sexe, String classe, int niveau, int pv,
+	public PnjEntity(int inventaireId, int dialogueId, String nom, Sexe sexe, Role role, int niveau, int pv,
 			int pvMax, int forcePersonnage, int agilite, int defense, int argent) {
-		super(inventaireId, dialogueId, nom, sexe, classe, niveau, pv, pvMax, forcePersonnage, agilite, defense, argent);
+		super(inventaireId, dialogueId, nom, sexe, role, niveau, pv, pvMax, forcePersonnage, agilite, defense, argent);
 	}
 	
 }
