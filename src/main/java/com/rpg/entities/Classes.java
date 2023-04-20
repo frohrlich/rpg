@@ -8,17 +8,11 @@ public enum Classes {
 	
 	Classes() {}  
 	
-private String classe;
-
-	
+	private String classe;
 	private Classes(String classe) {
 		this.classe = classe;
 	}
 	
-
-	
-
-
 	public String getclasse() {
 		return classe;
 	}
