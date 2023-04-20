@@ -13,9 +13,9 @@ public class JoueurEntity extends PersonnageEntity {
 	public JoueurEntity() {
 	}
 
-	public JoueurEntity(int inventaireId, int dialogueId, String nom, String sexe, String classe, int niveau, int pv,
+	public JoueurEntity(int inventaireId, int dialogueId, String nom, Sexe sexe, Role role, int niveau, int pv,
 			int pvMax, int forcePersonnage, int agilite, int defense, int argent, int xp) {
-		super(inventaireId, dialogueId, nom, sexe, classe, niveau, pv, pvMax, forcePersonnage, agilite, defense,
+		super(inventaireId, dialogueId, nom, sexe, role, niveau, pv, pvMax, forcePersonnage, agilite, defense,
 				argent);
 		this.xp = xp;
 	}

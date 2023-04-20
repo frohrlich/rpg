@@ -13,9 +13,9 @@ public class EnnemiEntity extends PnjEntity {
 		super();
 	}
 
-	public EnnemiEntity(int inventaireId, int dialogueId, String nom, String sexe, String classe, int niveau,
+	public EnnemiEntity(int inventaireId, int dialogueId, String nom, Sexe sexe, Role role, int niveau,
 			int pv, int pvMax, int forcePersonnage, int agilite, int defense, int argent) {
-		super(inventaireId, dialogueId, nom, sexe, classe, niveau, pv, pvMax, forcePersonnage, agilite, defense, argent);
+		super(inventaireId, dialogueId, nom, sexe, role, niveau, pv, pvMax, forcePersonnage, agilite, defense, argent);
 	}
 
 	@Override
@@ -24,7 +24,7 @@ public class EnnemiEntity extends PnjEntity {
 				+ ", getDialogueId()=" + getDialogueId()
 				+ ", getNom()=" + getNom() 
 				+ ", getSexe()=" + getSexe() 
-				+ ", getClasse()=" + getClasse()
+				+ ", getClasse()=" + getRole()
 				+ ", getNiveau()=" + getNiveau() 
 				+ ", getPv()=" + getPv() 
 				+ ", getPvMax()=" + getPvMax()
