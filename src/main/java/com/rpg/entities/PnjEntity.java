@@ -17,5 +17,10 @@ public class PnjEntity extends PersonnageEntity {
 			int pvMax, int forcePersonnage, int agilite, int defense, int argent) {
 		super(inventaireId, dialogueId, nom, sexe, role, niveau, pv, pvMax, forcePersonnage, agilite, defense, argent);
 	}
+
+	@Override
+	public String toString() {
+		return super.toString() + "PnjEntity []";
+	}
 	
 }

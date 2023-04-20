@@ -33,4 +33,9 @@ public class JoueurEntity extends PersonnageEntity {
 	// -------------------------- FIN les
 	// getters/setters----------------------------------------
 
+	@Override
+	public String toString() {
+		return super.toString() + " JoueurEntity [xp=" + xp + "]";
+	}
+	
 }

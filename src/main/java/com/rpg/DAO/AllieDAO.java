@@ -1,19 +1,19 @@
 package com.rpg.DAO;
 
 import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-
-import com.rpg.Connexion;
-import com.rpg.entities.EnnemiEntity;
-
 import javax.persistence.Query;
 
-// On va faire le CRUD (create, read, update, delete)
+import com.rpg.Connexion;
+import com.rpg.entities.AllieEntity;
 
-public class EnnemiDAO {
+
+
+public class AllieDAO {
 	
-	public List<EnnemiEntity> findAll() {
+	public List<AllieEntity> findAll() {
 		// Connexion à la BDD
 		Connexion conn = Connexion.getInstance();
 		
@@ -21,7 +21,7 @@ public class EnnemiDAO {
 		EntityManager em = conn.getEmf().createEntityManager();
 		
 		// Ecriture de la requête pour interroger la BDD
-		String query = "From EnnemiEntity";
+		String query = "From AllieEntity";
 		
 		// Création d'un objet depuis cette requête pour qu'hibernate fasse le mapping
 		Query q = em.createQuery(query);
@@ -33,20 +33,20 @@ public class EnnemiDAO {
 		return q.getResultList();
 	}
 	
-	public EnnemiEntity findById(int id) {
+	public AllieEntity findById(int id) {
 		
 		Connexion conn = Connexion.getInstance();
 		
 		EntityManager em = conn.getEmf().createEntityManager();
 		
-		EnnemiEntity ennemi = em.find(EnnemiEntity.class, id);
+		AllieEntity allie = em.find(AllieEntity.class, id);
 		
 		conn.deconnexion();
 		
-		return ennemi;
+		return allie;
 	}
 	
-	public EnnemiEntity create(EnnemiEntity ennemi) {
+	public AllieEntity create(AllieEntity allie) {
 		
 		Connexion conn = Connexion.getInstance();
 		
@@ -54,28 +54,28 @@ public class EnnemiDAO {
 		
 		EntityTransaction tx = em.getTransaction();
 		
-		EnnemiEntity ennemiToReturn = null;
+		AllieEntity allieToReturn = null;
 		
 		try {
 			// on démarre la transaction
 			tx.begin();
 			// faire persister un objet, enregistrer en bdd
-			em.persist(ennemi);
+			em.persist(allie);
 			// on va commit la transation
 			tx.commit();
 			
-			ennemiToReturn = ennemi;
+			allieToReturn = allie;
 		} catch (Exception e) { // en cas de soucis
 			if (tx != null && tx.isActive()) { // si une transaction sort une erreur
 				tx.rollback(); // marche arrière sur les actions précédentes
 			}
 			e.printStackTrace(); // affichage de toute la stack d'erreurs
 		}
-		return ennemiToReturn;
+		return allieToReturn;
 		
 	}
 
-	public EnnemiEntity update(int id, EnnemiEntity ennemi) {
+	public AllieEntity update(int id, AllieEntity allie) {
 		
 		Connexion conn = Connexion.getInstance();
 		
@@ -89,22 +89,22 @@ public class EnnemiDAO {
 			tx.begin(); // j'annule les auto-commit
 			
 			// Récupération de l'objet à modifier
-			EnnemiEntity ennemiToUpdate = this.findById(id);
-			ennemiToUpdate.setInventaireId(ennemi.getInventaireId());
-			ennemiToUpdate.setDialogueId(ennemi.getDialogueId());
-			ennemiToUpdate.setNom(ennemi.getNom());
-			ennemiToUpdate.setSexe(ennemi.getSexe());
-			ennemiToUpdate.setRole(ennemi.getRole());
-			ennemiToUpdate.setNiveau(ennemi.getNiveau());
-			ennemiToUpdate.setPv(ennemi.getPv());
-			ennemiToUpdate.setPvMax(ennemi.getPvMax());
-			ennemiToUpdate.setForcePersonnage(ennemi.getForcePersonnage());
-			ennemiToUpdate.setAgilite(ennemi.getAgilite());
-			ennemiToUpdate.setDefense(ennemi.getDefense());
-			ennemiToUpdate.setArgent(ennemi.getArgent());
+			AllieEntity allieToUpdate = this.findById(id);
+			allieToUpdate.setInventaireId(allie.getInventaireId());
+			allieToUpdate.setDialogueId(allie.getDialogueId());
+			allieToUpdate.setNom(allie.getNom());
+			allieToUpdate.setSexe(allie.getSexe());
+			allieToUpdate.setRole(allie.getRole());
+			allieToUpdate.setNiveau(allie.getNiveau());
+			allieToUpdate.setPv(allie.getPv());
+			allieToUpdate.setPvMax(allie.getPvMax());
+			allieToUpdate.setForcePersonnage(allie.getForcePersonnage());
+			allieToUpdate.setAgilite(allie.getAgilite());
+			allieToUpdate.setDefense(allie.getDefense());
+			allieToUpdate.setArgent(allie.getArgent());
 			
 			// Persistance de l'objet
-			EnnemiEntity updated = em.merge(ennemiToUpdate);
+			AllieEntity updated = em.merge(allieToUpdate);
 			
 			// Envoi sur le serveur
 			tx.commit();
@@ -140,10 +140,10 @@ public class EnnemiDAO {
 		try {
 			tx.begin();
 			
-			EnnemiEntity ennemi = this.findById(id); // l'entité doit être récupérée pour pouvoir procéder à la suppression
+			AllieEntity allie = this.findById(id); // l'entité doit être récupérée pour pouvoir procéder à la suppression
 			
 			// méthode de suppression
-			em.remove(em.contains(ennemi) ?ennemi : em.merge(ennemi)); // on met l'entité en argument et pas l'id
+			em.remove(em.contains(allie) ?allie : em.merge(allie)); // on met l'entité en argument et pas l'id
 			// je fais un if else de manière raccourcie en une seule ligne
 			tx.commit();
 			

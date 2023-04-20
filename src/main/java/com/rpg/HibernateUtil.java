@@ -8,6 +8,7 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 import org.hibernate.service.ServiceRegistry;
 
+import com.rpg.entities.AllieEntity;
 import com.rpg.entities.EnnemiEntity;
 import com.rpg.entities.JoueurEntity;
 
@@ -37,6 +38,7 @@ public class HibernateUtil {
 				// Ajout des classes à Mapper
 				configuration.addAnnotatedClass(EnnemiEntity.class);
 				configuration.addAnnotatedClass(JoueurEntity.class);
+				configuration.addAnnotatedClass(AllieEntity.class);
 				
 				// Création du ServiceRegistry
 				ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()

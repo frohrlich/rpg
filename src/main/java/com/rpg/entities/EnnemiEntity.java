@@ -20,20 +20,7 @@ public class EnnemiEntity extends PnjEntity {
 
 	@Override
 	public String toString() {
-		return "EnnemiEntity [getInventaireId()=" + getInventaireId() 
-				+ ", getDialogueId()=" + getDialogueId()
-				+ ", getNom()=" + getNom() 
-				+ ", getSexe()=" + getSexe() 
-				+ ", getClasse()=" + getRole()
-				+ ", getNiveau()=" + getNiveau() 
-				+ ", getPv()=" + getPv() 
-				+ ", getPvMax()=" + getPvMax()
-				+ ", getForcePersonnage()=" + getForcePersonnage() 
-				+ ", getAgilite()=" + getAgilite() 
-				+ ", getDefense()=" + getDefense()
-				+ ", getArgent()=" + getArgent() 
-				+ ", getId()=" + getId()
-				+ "]";
+		return super.toString() + "EnnemiEntity []";
 	}
-		
+
 }
