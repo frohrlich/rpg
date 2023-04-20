@@ -1,4 +1,4 @@
-package com.projet.Personnage.Entities;
+package com.rpg.entities;
 
 public enum Civilité {
 	M("Monsieur"),
