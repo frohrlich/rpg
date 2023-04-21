@@ -1,15 +1,19 @@
 package com.rpg.ws;
 
-import javax.websocket.OnClose;
-import javax.websocket.OnError;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.server.ServerEndpoint;
-
+import com.rpg.entities.AllieEntity;
+import com.rpg.entities.JoueurEntity;
+import com.rpg.entities.PersonnageEntity;
+import com.rpg.entities.Role;
+import com.rpg.entities.Sexe;
 import com.rpg.vue.Option;
-import com.rpg.vue.Personnage;
 import com.rpg.vue.Vue;
 import com.rpg.vue.VueDialogue;
+
+import jakarta.websocket.OnClose;
+import jakarta.websocket.OnError;
+import jakarta.websocket.OnMessage;
+import jakarta.websocket.OnOpen;
+import jakarta.websocket.server.ServerEndpoint;
 
 @ServerEndpoint("/websocketendpoint")
 public class WsServer {
@@ -20,13 +24,15 @@ public class WsServer {
 		System.out.println("Open Connection ...");
 
 		// View initialization
-		Personnage felix = new Personnage("Félix");
-		Personnage inconnu = new Personnage("Inconnu");
+		PersonnageEntity felix = new JoueurEntity(2, 3, "Lalaina", Sexe.M, Role.Ep, 150, 1280, 2280, 300, 300, 2000, 3,
+				1000);
+		PersonnageEntity fermiere = new AllieEntity(2, 3, "Basma", Sexe.F, Role.Ar, 150, 1280, 2280, 300, 300, 2000, 3);
 		String texteVue = "Bienvenue dans la forêt des sangliers, voyageur.";
-		this.vueActuelle = new VueDialogue("img/bg_foret", texteVue, felix, inconnu);
-		this.vueActuelle.addOption(new Option("Saluer l'inconnu"));
-		this.vueActuelle.addOption(new Option("Ramasser une branche et le frapper"));
-		this.vueActuelle.addOption(new Option("S'enfuir en courant"));
+		Vue myVue = new VueDialogue("img/bg_foret", texteVue, felix, fermiere);
+		myVue.addOption(new Option("Saluer l'inconnue bien bas"));
+		myVue.addOption(new Option("Ramasser une branche et la frapper"));
+		myVue.addOption(new Option("S'enfuir en courant"));
+		this.vueActuelle = myVue;
 	}
 
 	@OnClose

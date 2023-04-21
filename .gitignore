@@ -62,4 +62,4 @@ local.properties
 
 # Produced files
 target/
-
+build/

@@ -1,7 +1,7 @@
 /**
  * Websocket configuration
  */
-var webSocket = new WebSocket("ws://localhost:8080/RPGWebSocketServer/websocketendpoint");
+var webSocket = new WebSocket("ws://localhost:8080/rpg/websocketendpoint");
 var echoText = document.getElementById("echoText");
 echoText.value = "";
 var message = document.getElementById("message");
