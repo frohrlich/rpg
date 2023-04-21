@@ -3,17 +3,19 @@ package com.rpg.vue;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.rpg.entities.PersonnageEntity;
+
 public class Vue {
 	protected String background;
 	protected String texte;
 	protected List<Option> options;
-	protected Personnage joueur;
+	protected PersonnageEntity joueur;
 
 	public Vue() {
 	}
 
 	// Constructor with option list
-	public Vue(String background, String texte, List<Option> options, Personnage joueur) {
+	public Vue(String background, String texte, List<Option> options, PersonnageEntity joueur) {
 		this.background = background;
 		this.texte = texte;
 		this.options = options;
@@ -21,7 +23,7 @@ public class Vue {
 	}
 
 	// Constructor without options
-	public Vue(String background, String texte, Personnage joueur) {
+	public Vue(String background, String texte, PersonnageEntity joueur) {
 		this.background = background;
 		this.texte = texte;
 		this.options = new ArrayList<Option>();
@@ -52,11 +54,11 @@ public class Vue {
 		this.options = options;
 	}
 
-	public Personnage getJoueur() {
+	public PersonnageEntity getJoueur() {
 		return joueur;
 	}
 
-	public void setJoueur(Personnage joueur) {
+	public void setJoueur(PersonnageEntity joueur) {
 		this.joueur = joueur;
 	}
 
