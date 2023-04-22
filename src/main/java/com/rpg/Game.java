@@ -50,15 +50,15 @@ public class Game {
 
 	public String update(String message) {
 		switch (message) {
-		case "option1Clicked":
+		case "option1":
 			this.getCurrentVue().setTexte("Comment allez-vous ?");
 			this.getCurrentVue().getJoueur().setApparence("img/epeisteM.png");
 			break;
-		case "option2Clicked":
+		case "option2":
 			this.getCurrentVue().setTexte("Un ours ! Damnation");
 			this.getCurrentVue().getJoueur().setApparence("img/le_ours.png");
 			break;
-		case "option3Clicked":
+		case "option3":
 			this.getCurrentVue().setTexte("Adios");
 			this.getCurrentVue().getJoueur().setApparence("img/epeisteM.png");
 			break;

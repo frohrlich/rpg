@@ -204,13 +204,13 @@ function component(width, height, colorImage, x, y, type, text = null) {
 		// checks if user clicked somewhere on game area
 		if (myGameArea.x && myGameArea.y) {
 			if (myOption1.clicked()) {
-				wsSendMessage("option1Clicked"); // sends "option clicked" message to server
+				wsSendMessage("option1"); // sends "option clicked" message to server
 			}
 			else if (myOption2.clicked()) {
-				wsSendMessage("option2Clicked");
+				wsSendMessage("option2");
 			}
 			else if (myOption3.clicked()) {
-				wsSendMessage("option3Clicked");
+				wsSendMessage("option3");
 			}
 			myGameArea.x = 0; // reset click position
 			myGameArea.y = 0;
