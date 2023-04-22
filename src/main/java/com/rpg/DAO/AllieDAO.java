@@ -102,6 +102,7 @@ public class AllieDAO {
 			allieToUpdate.setAgilite(allie.getAgilite());
 			allieToUpdate.setDefense(allie.getDefense());
 			allieToUpdate.setArgent(allie.getArgent());
+			allieToUpdate.setApparence(allie.getApparence());
 			
 			// Persistance de l'objet
 			AllieEntity updated = em.merge(allieToUpdate);

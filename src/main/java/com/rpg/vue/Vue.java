@@ -76,4 +76,16 @@ public class Vue {
 		}
 	}
 
+	// toString sends infos in json format
+	@Override
+	public String toString() {
+		return "{\"background\":\"" + background + "\","
+			   + "\"texte\":\"" + texte + "\","
+			   + "\"option1\":\"" + options.get(0).getTexte() + "\","
+			   + "\"option2\":\"" + options.get(1).getTexte() + "\","
+			   + "\"option3\":\"" + options.get(2).getTexte() + "\","
+			   + "\"joueur\":\"" + joueur.getApparence() + "\""
+			   + "}";
+	}
+
 }

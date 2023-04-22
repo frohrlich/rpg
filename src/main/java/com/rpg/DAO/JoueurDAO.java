@@ -98,6 +98,7 @@ public class JoueurDAO {
 			joueurToUpdate.setDefense(joueur.getDefense());
 			joueurToUpdate.setArgent(joueur.getArgent());
 			joueurToUpdate.setXp(joueur.getXp());
+			joueurToUpdate.setApparence(joueur.getApparence());
 
 			// Persistance de l'objet
 			JoueurEntity updated = em.merge(joueurToUpdate);

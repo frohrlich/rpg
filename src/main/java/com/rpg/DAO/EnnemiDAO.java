@@ -1,13 +1,13 @@
 package com.rpg.DAO;
 
 import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
 
 import com.rpg.Connexion;
 import com.rpg.entities.EnnemiEntity;
-
-import javax.persistence.Query;
 
 // On va faire le CRUD (create, read, update, delete)
 
@@ -102,6 +102,7 @@ public class EnnemiDAO {
 			ennemiToUpdate.setAgilite(ennemi.getAgilite());
 			ennemiToUpdate.setDefense(ennemi.getDefense());
 			ennemiToUpdate.setArgent(ennemi.getArgent());
+			ennemiToUpdate.setApparence(ennemi.getApparence());
 			
 			// Persistance de l'objet
 			EnnemiEntity updated = em.merge(ennemiToUpdate);

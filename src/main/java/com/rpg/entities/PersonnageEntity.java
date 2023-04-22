@@ -1,6 +1,13 @@
 package com.rpg.entities;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.Table;
 
 @Table(name="personnage")
 @Entity
@@ -50,6 +57,9 @@ public  abstract class PersonnageEntity {
 	@Column(name="argent", nullable=false)
 	private int argent;
 	
+	@Column(name = "apparence", nullable = false)
+	private String apparence;
+
 	// Getters et Setters
 
 	public int getId() {
@@ -151,13 +161,21 @@ public  abstract class PersonnageEntity {
 	public void setArgent(int argent) {
 		this.argent = argent;
 	}
+
+	public String getApparence() {
+		return apparence;
+	}
+
+	public void setApparence(String apparence) {
+		this.apparence = apparence;
+	}
 	
 	// Constructeurs
 
 	public PersonnageEntity() {}
 
 	public PersonnageEntity(int inventaireId, int dialogueId, String nom, Sexe sexe, Role role, int niveau,
-			int pv, int pvMax, int forcePersonnage, int agilite, int defense, int argent) {
+			int pv, int pvMax, int forcePersonnage, int agilite, int defense, int argent, String apparence) {
 		this.setInventaireId(inventaireId);
 		this.setDialogueId(dialogueId);
 		this.setNom(nom);
@@ -170,6 +188,7 @@ public  abstract class PersonnageEntity {
 		this.setAgilite(agilite);
 		this.setDefense(defense);
 		this.setArgent(argent);
+		this.setApparence(apparence);
 	}
 
 	@Override
@@ -187,6 +206,7 @@ public  abstract class PersonnageEntity {
 				+ ", agilite=" + agilite 
 				+ ", defense=" + defense 
 				+ ", argent=" + argent 
+				+ ", apparence=" + apparence
 				+ "]";
 	}
 	

@@ -41,5 +41,18 @@ public class VueAvecPnj extends Vue {
 			System.out.println(this.getOptions().get(i).getTexte() + " : Tapez " + (i + 1));
 		}
 	}
+	
+	// toString sends infos in json format
+	@Override
+	public String toString() {
+		return "{\"background\":\"" + background + "\","
+			   + "\"texte\":\"" + pnj.getNom() + " : " + texte + "\","
+			   + "\"option1\":\"" + options.get(0).getTexte() + "\","
+			   + "\"option2\":\"" + options.get(1).getTexte() + "\","
+			   + "\"option3\":\"" + options.get(2).getTexte() + "\","
+			   + "\"joueur\":\"" + joueur.getApparence() + "\","
+			   + "\"pnj\":\"" + pnj.getApparence() + "\""
+			   + "}";
+	}
 
 }
