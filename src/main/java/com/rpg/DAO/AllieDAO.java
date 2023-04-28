@@ -91,7 +91,7 @@ public class AllieDAO {
 			// Récupération de l'objet à modifier
 			AllieEntity allieToUpdate = this.findById(id);
 			allieToUpdate.setInventaireId(allie.getInventaireId());
-			allieToUpdate.setDialogueId(allie.getDialogueId());
+			allieToUpdate.setDialogue(allie.getDialogue());
 			allieToUpdate.setNom(allie.getNom());
 			allieToUpdate.setSexe(allie.getSexe());
 			allieToUpdate.setRole(allie.getRole());
@@ -102,6 +102,7 @@ public class AllieDAO {
 			allieToUpdate.setAgilite(allie.getAgilite());
 			allieToUpdate.setDefense(allie.getDefense());
 			allieToUpdate.setArgent(allie.getArgent());
+			allieToUpdate.setApparence(allie.getApparence());
 			
 			// Persistance de l'objet
 			AllieEntity updated = em.merge(allieToUpdate);

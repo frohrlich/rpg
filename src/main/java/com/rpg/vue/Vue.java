@@ -66,6 +66,7 @@ public class Vue {
 		this.options.add(option);
 	}
 
+	// method to test in terminal
 	public void affiche() {
 		System.out.println("|" + this.getJoueur().getNom() + "|");
 		System.out.println();
@@ -74,6 +75,19 @@ public class Vue {
 		for (int i = 0; i < this.getOptions().size(); i++) {
 			System.out.println(this.getOptions().get(i).getTexte() + " : Tapez " + (i + 1));
 		}
+	}
+
+	// toString sends infos in json format
+	@Override
+	public String toString() {
+		String returnString = "{\"background\":\"" + background + "\","
+							 + "\"texte\":\"" + texte + "\",";
+		for (int i = 0; i < this.options.size(); i++) {
+			returnString +=    "\"option" + (i + 1) + "\":" + "\"" + this.options.get(i).getTexte() + "\",";
+		}
+		returnString +=		   "\"joueur\":\"" + joueur.getApparence() + "\""
+							 + "}";
+		return returnString;
 	}
 
 }

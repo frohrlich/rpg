@@ -1,12 +1,7 @@
 package com.rpg;
 
 import com.rpg.DAO.AllieDAO;
-import com.rpg.DAO.EnnemiDAO;
-import com.rpg.DAO.JoueurDAO;
 import com.rpg.entities.AllieEntity;
-import com.rpg.entities.EnnemiEntity;
-import com.rpg.entities.JoueurEntity;
-import com.rpg.entities.PersonnageEntity;
 import com.rpg.entities.Role;
 import com.rpg.entities.Sexe;
 
@@ -27,7 +22,7 @@ public class Main {
 
 		Connexion conn = Connexion.getInstance();
 		
-		AllieEntity allie = new AllieEntity(2, 3, "Basma", Sexe.F, Role.Ar, 150, 1280, 2280, 300, 300, 2000, 3);
+		AllieEntity allie = new AllieEntity(2, "Basma", Sexe.F, Role.Ar, 150, 1280, 2280, 300, 300, 2000, 3, "img/paysanne.png");
 		
 		AllieDAO dao = new AllieDAO();
 		

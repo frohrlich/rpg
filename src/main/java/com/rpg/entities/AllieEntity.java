@@ -4,18 +4,19 @@ import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
-@Table(name="allie")
+@Table(name = "allie")
 @Entity
-@PrimaryKeyJoinColumn(name="pnj_id")
+@PrimaryKeyJoinColumn(name = "pnj_id")
 public class AllieEntity extends PnjEntity {
-	
+
 	public AllieEntity() {
 		super();
 	}
 
-	public AllieEntity(int inventaireId, int dialogueId, String nom, Sexe sexe, Role role, int niveau,
-			int pv, int pvMax, int forcePersonnage, int agilite, int defense, int argent) {
-		super(inventaireId, dialogueId, nom, sexe, role, niveau, pv, pvMax, forcePersonnage, agilite, defense, argent);
+	public AllieEntity(int inventaireId, String nom, Sexe sexe, Role role, int niveau, int pv,
+			int pvMax, int forcePersonnage, int agilite, int defense, int argent, String apparence) {
+		super(inventaireId, nom, sexe, role, niveau, pv, pvMax, forcePersonnage, agilite, defense, argent,
+				apparence);
 	}
 
 	@Override

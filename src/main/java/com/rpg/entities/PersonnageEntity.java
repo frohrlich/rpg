@@ -1,14 +1,18 @@
 package com.rpg.entities;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.Table;
 
 @Table(name="personnage")
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public  abstract class PersonnageEntity {
-	
-	// Attributs
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", updatable = false, nullable = false)
@@ -16,9 +20,6 @@ public  abstract class PersonnageEntity {
 	
 	@Column(name="inventaire_id", nullable=false)
 	private int inventaireId;
-	
-	@Column(name="dialogue_id", nullable=false)
-	private int dialogueId;
 	
 	@Column(name="nom", length=255, nullable=false)
 	private String nom;
@@ -50,6 +51,9 @@ public  abstract class PersonnageEntity {
 	@Column(name="argent", nullable=false)
 	private int argent;
 	
+	@Column(name = "apparence", nullable = false)
+	private String apparence;
+
 	// Getters et Setters
 
 	public int getId() {
@@ -62,14 +66,6 @@ public  abstract class PersonnageEntity {
 
 	public void setInventaireId(int inventaireId) {
 		this.inventaireId = inventaireId;
-	}
-
-	public int getDialogueId() {
-		return dialogueId;
-	}
-
-	public void setDialogueId(int dialogueId) {
-		this.dialogueId = dialogueId;
 	}
 
 	public String getNom() {
@@ -151,15 +147,22 @@ public  abstract class PersonnageEntity {
 	public void setArgent(int argent) {
 		this.argent = argent;
 	}
+
+	public String getApparence() {
+		return apparence;
+	}
+
+	public void setApparence(String apparence) {
+		this.apparence = apparence;
+	}
 	
 	// Constructeurs
 
 	public PersonnageEntity() {}
 
-	public PersonnageEntity(int inventaireId, int dialogueId, String nom, Sexe sexe, Role role, int niveau,
-			int pv, int pvMax, int forcePersonnage, int agilite, int defense, int argent) {
+	public PersonnageEntity(int inventaireId, String nom, Sexe sexe, Role role, int niveau,
+			int pv, int pvMax, int forcePersonnage, int agilite, int defense, int argent, String apparence) {
 		this.setInventaireId(inventaireId);
-		this.setDialogueId(dialogueId);
 		this.setNom(nom);
 		this.setSexe(sexe);
 		this.setRole(role);
@@ -170,13 +173,13 @@ public  abstract class PersonnageEntity {
 		this.setAgilite(agilite);
 		this.setDefense(defense);
 		this.setArgent(argent);
+		this.setApparence(apparence);
 	}
 
 	@Override
 	public String toString() {
 		return "PersonnageEntity [id=" + id 
 				+ ", inventaireId=" + inventaireId 
-				+ ", dialogueId=" + dialogueId 
 				+ ", nom=" + nom 
 				+ ", sexe=" + sexe 
 				+ ", role=" + role 
@@ -187,6 +190,7 @@ public  abstract class PersonnageEntity {
 				+ ", agilite=" + agilite 
 				+ ", defense=" + defense 
 				+ ", argent=" + argent 
+				+ ", apparence=" + apparence
 				+ "]";
 	}
 	
