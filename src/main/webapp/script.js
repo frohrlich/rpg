@@ -219,8 +219,8 @@ function component(width, height, colorImage, x, y, type, text = null) {
 		myBackground.update();
 		myMainTextBox.update();
 		myOption1.update();
-		myOption2.update();
-		myOption3.update();
+		//myOption2.update();
+		//myOption3.update();
 		myCharacter.newPos();
 		myCharacter.update();
 		myPnj.newPos();
@@ -282,9 +282,15 @@ webSocket.addEventListener("message", (event) => {
 
 	myMainTextBox.text = vueInfo.texte;
 
-	myOption1.text = vueInfo.option1;
-	myOption2.text = vueInfo.option2;
-	myOption3.text = vueInfo.option3;
+	if (Object.hasOwn(vueInfo, 'option1')) {
+		myOption1.text = vueInfo.option1;
+	}
+	if (Object.hasOwn(vueInfo, 'option2')) {
+		myOption2.text = vueInfo.option2;
+	}
+	if (Object.hasOwn(vueInfo, 'option3')) {
+		myOption3.text = vueInfo.option3;
+	}
 
 	previousVue = vueInfo;
 })
