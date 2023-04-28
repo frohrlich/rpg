@@ -219,8 +219,8 @@ function component(width, height, colorImage, x, y, type, text = null) {
 		myBackground.update();
 		myMainTextBox.update();
 		myOption1.update();
-		//myOption2.update();
-		//myOption3.update();
+		myOption2.update();
+		myOption3.update();
 		myCharacter.newPos();
 		myCharacter.update();
 		myPnj.newPos();
