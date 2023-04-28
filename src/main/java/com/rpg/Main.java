@@ -22,7 +22,7 @@ public class Main {
 
 		Connexion conn = Connexion.getInstance();
 		
-		AllieEntity allie = new AllieEntity(2, 3, "Basma", Sexe.F, Role.Ar, 150, 1280, 2280, 300, 300, 2000, 3, "img/paysanne.png");
+		AllieEntity allie = new AllieEntity(2, "Basma", Sexe.F, Role.Ar, 150, 1280, 2280, 300, 300, 2000, 3, "img/paysanne.png");
 		
 		AllieDAO dao = new AllieDAO();
 		

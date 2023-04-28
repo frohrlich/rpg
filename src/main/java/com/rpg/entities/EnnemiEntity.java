@@ -15,9 +15,9 @@ public class EnnemiEntity extends PnjEntity {
 		super();
 	}
 
-	public EnnemiEntity(int inventaireId, int dialogueId, String nom, Sexe sexe, Role role, int niveau,
+	public EnnemiEntity(int inventaireId, String nom, Sexe sexe, Role role, int niveau,
 			int pv, int pvMax, int forcePersonnage, int agilite, int defense, int argent, String apparence) {
-		super(inventaireId, dialogueId, nom, sexe, role, niveau, pv, pvMax, forcePersonnage, agilite, defense, argent,
+		super(inventaireId, nom, sexe, role, niveau, pv, pvMax, forcePersonnage, agilite, defense, argent,
 				apparence);
 	}
 

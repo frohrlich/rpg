@@ -15,4 +15,9 @@ public class Option {
 		this.texte = texte;
 	}
 
+	@Override
+	public String toString() {
+		return "Option [texte=" + texte + "]";
+	}
+
 }

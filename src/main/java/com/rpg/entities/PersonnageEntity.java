@@ -13,9 +13,6 @@ import javax.persistence.Table;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public  abstract class PersonnageEntity {
-	
-	// Attributs
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", updatable = false, nullable = false)
@@ -23,9 +20,6 @@ public  abstract class PersonnageEntity {
 	
 	@Column(name="inventaire_id", nullable=false)
 	private int inventaireId;
-	
-	@Column(name="dialogue_id", nullable=false)
-	private int dialogueId;
 	
 	@Column(name="nom", length=255, nullable=false)
 	private String nom;
@@ -72,14 +66,6 @@ public  abstract class PersonnageEntity {
 
 	public void setInventaireId(int inventaireId) {
 		this.inventaireId = inventaireId;
-	}
-
-	public int getDialogueId() {
-		return dialogueId;
-	}
-
-	public void setDialogueId(int dialogueId) {
-		this.dialogueId = dialogueId;
 	}
 
 	public String getNom() {
@@ -174,10 +160,9 @@ public  abstract class PersonnageEntity {
 
 	public PersonnageEntity() {}
 
-	public PersonnageEntity(int inventaireId, int dialogueId, String nom, Sexe sexe, Role role, int niveau,
+	public PersonnageEntity(int inventaireId, String nom, Sexe sexe, Role role, int niveau,
 			int pv, int pvMax, int forcePersonnage, int agilite, int defense, int argent, String apparence) {
 		this.setInventaireId(inventaireId);
-		this.setDialogueId(dialogueId);
 		this.setNom(nom);
 		this.setSexe(sexe);
 		this.setRole(role);
@@ -195,7 +180,6 @@ public  abstract class PersonnageEntity {
 	public String toString() {
 		return "PersonnageEntity [id=" + id 
 				+ ", inventaireId=" + inventaireId 
-				+ ", dialogueId=" + dialogueId 
 				+ ", nom=" + nom 
 				+ ", sexe=" + sexe 
 				+ ", role=" + role 

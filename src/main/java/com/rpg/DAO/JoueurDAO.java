@@ -86,7 +86,6 @@ public class JoueurDAO {
 			// Récupération de l'objet à modifier
 			JoueurEntity joueurToUpdate = this.findById(id);
 			joueurToUpdate.setInventaireId(joueur.getInventaireId());
-			joueurToUpdate.setDialogueId(joueur.getDialogueId());
 			joueurToUpdate.setNom(joueur.getNom());
 			joueurToUpdate.setSexe(joueur.getSexe());
 			joueurToUpdate.setRole(joueur.getRole());
