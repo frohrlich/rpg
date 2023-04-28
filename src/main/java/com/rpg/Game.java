@@ -52,7 +52,10 @@ public class Game {
 	public String update(String message) {
 		switch (message) {
 		case "option1":
-			currentVue = currentEvenement.nextVue();
+			Vue nextVue = currentEvenement.nextVue();
+			if(nextVue != null) {
+				currentVue = nextVue;
+			}
 			break;
 		default:
 		}
