@@ -1,4 +1,4 @@
-package com.projet.rpg.ennemi;
+package com.projet.rpg.personnage.pnj.ennemi;
 
 import java.util.List;
 
@@ -23,24 +23,34 @@ public class EnnemiController {
 		this.ennemiService = ennemiService;
 	}
 	
-	@PostMapping("/write")
-	public void write(@RequestBody Ennemi ennemi) {
-		ennemiService.save(ennemi);
-	}
-	
-	@GetMapping("/read")
-	public List<Ennemi> read() {
+	@GetMapping
+	public List<Ennemi> findAll() {
 		return ennemiService.findAll();
 	}
 	
-	@PutMapping("/update")
-	public void update(@RequestBody Ennemi ennemi) {
-		ennemiService.update(ennemi);
+	@GetMapping("{id}")
+	public Ennemi findById(@PathVariable int id) {
+		return ennemiService.findById(id);
 	}
 	
-	@DeleteMapping("/remove/{id}")
-	public void remove(@PathVariable int id) {
-		ennemiService.delete(id);
+	@PostMapping
+	public void save(@RequestBody Ennemi ennemi) {
+		ennemiService.save(ennemi);
+	}
+	
+	@DeleteMapping("{id}")
+	public void deleteById(@PathVariable int id) {
+		ennemiService.deleteById(id);
+	}
+	
+	@DeleteMapping
+	public void deleteAll() {
+		ennemiService.deleteAll();
+	}
+	
+	@PutMapping
+	public void update(@RequestBody Ennemi ennemi) {
+		ennemiService.update(ennemi);
 	}
 
 }

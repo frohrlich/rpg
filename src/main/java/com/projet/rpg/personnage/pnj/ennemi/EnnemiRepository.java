@@ -1,4 +1,4 @@
-package com.projet.rpg.ennemi;
+package com.projet.rpg.personnage.pnj.ennemi;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

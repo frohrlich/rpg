@@ -1,8 +1,7 @@
-package com.projet.rpg.allie;
+package com.projet.rpg.personnage.pnj.allie;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,31 +17,40 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/allies")
 public class AllieController {
 	
-	@Autowired
 	private final AllieService allieService;
 	
 	public AllieController(AllieService allieService) {
 		this.allieService = allieService;
 	}
 	
-	@PostMapping("/write")
-	public void write(@RequestBody Allie allie) {
-		allieService.save(allie);
-	}
-	
-	@GetMapping("/read")
-	public List<Allie> read() {
+	@GetMapping
+	public List<Allie> findAll() {
 		return allieService.findAll();
 	}
 	
-	@PutMapping("/update")
-	public void update(@RequestBody Allie allie) {
-		allieService.update(allie);
+	@GetMapping("{id}")
+	public Allie findById(@PathVariable int id) {
+		return allieService.findById(id);
 	}
 	
-	@DeleteMapping("/remove/{id}")
-	public void remove(@PathVariable int id) {
-		allieService.delete(id);
+	@PostMapping
+	public void save(@RequestBody Allie allie) {
+		allieService.save(allie);
+	}
+	
+	@DeleteMapping("{id}")
+	public void deleteById(@PathVariable int id) {
+		allieService.deleteById(id);
+	}
+	
+	@DeleteMapping
+	public void deleteAll() {
+		allieService.deleteAll();
+	}
+	
+	@PutMapping
+	public void update(@RequestBody Allie allie) {
+		allieService.update(allie);
 	}
 
 }

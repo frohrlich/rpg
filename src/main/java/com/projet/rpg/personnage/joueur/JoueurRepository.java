@@ -1,4 +1,4 @@
-package com.projet.rpg.joueur;
+package com.projet.rpg.personnage.joueur;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

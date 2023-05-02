@@ -1,4 +1,4 @@
-package com.projet.rpg.allie;
+package com.projet.rpg.personnage.pnj.allie;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

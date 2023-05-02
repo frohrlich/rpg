@@ -1,13 +1,13 @@
-package com.projet.rpg;
+package com.projet.rpg.personnage;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ThebestApplication {
+public class Main {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ThebestApplication.class, args);
+		SpringApplication.run(Main.class, args);
 	}
 
 }

@@ -1,4 +1,4 @@
-package com.projet.rpg.joueur;
+package com.projet.rpg.personnage.joueur;
 
 import java.util.List;
 
@@ -24,24 +24,34 @@ public class JoueurController {
 		this.joueurService = joueurService;
 	}
 	
-	@PostMapping("/write")
-	public void write(@RequestBody Joueur joueur) {
-		joueurService.save(joueur);
-	}
-	
-	@GetMapping("/read")
-	public List<Joueur> read() {
+	@GetMapping
+	public List<Joueur> findAll() {
 		return joueurService.findAll();
 	}
 	
-	@PutMapping("/update")
-	public void update(@RequestBody Joueur joueur) {
-		joueurService.update(joueur);
+	@GetMapping("{id}")
+	public Joueur findById(@PathVariable int id) {
+		return joueurService.findById(id);
 	}
 	
-	@DeleteMapping("/remove/{id}")
-	public void remove(@PathVariable int id) {
-		joueurService.delete(id);
+	@PostMapping
+	public void save(@RequestBody Joueur joueur) {
+		joueurService.save(joueur);
+	}
+	
+	@DeleteMapping("{id}")
+	public void deleteById(@PathVariable int id) {
+		joueurService.deleteById(id);
+	}
+	
+	@DeleteMapping
+	public void deleteAll() {
+		joueurService.deleteAll();
+	}
+	
+	@PutMapping
+	public void update(@RequestBody Joueur joueur) {
+		joueurService.update(joueur);
 	}
 
 }
