@@ -1,4 +1,4 @@
-package com.projet.rpg.vue;
+package com.projet.rpg.evenement;
 
 import com.projet.rpg.personnage.joueur.Joueur;
 import com.projet.rpg.personnage.pnj.Pnj;
@@ -10,13 +10,14 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class VueAvecPnj extends Vue {
-	
+public abstract class EvenementAvecPnj extends Evenement {
 	protected Pnj pnj;
 
-	public VueAvecPnj(String background, String texte, Joueur joueur, Pnj pnj) {
-		super(background, texte, joueur);
+	public EvenementAvecPnj(String background, int butinArgent, Joueur joueur, Pnj pnj) {
+		super(background, butinArgent, joueur);
 		this.pnj = pnj;
 	}
+
+	
 
 }

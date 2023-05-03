@@ -8,10 +8,10 @@
 		<version>3.0.6</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.rpg</groupId>
-	<artifactId>thebest</artifactId>
+	<groupId>com.projet</groupId>
+	<artifactId>rpg</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>thebest</name>
+	<name>rpg</name>
 	<description>Rpg bati sur le framework spring</description>
 	<properties>
 		<java.version>17</java.version>

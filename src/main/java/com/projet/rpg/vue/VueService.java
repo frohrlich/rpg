@@ -18,7 +18,7 @@ public class VueService {
 
 	// method to test in terminal
 	public void affiche() {
-		System.out.println("|" + vue.getJoueur().getNom() + "|");
+		System.out.println("|" + vue.getJoueur().getPersonnage().getNom() + "|");
 		System.out.println();
 		System.out.println(vue.getTexte());
 		System.out.println();
@@ -33,7 +33,7 @@ public class VueService {
 		for (int i = 0; i < vue.getOptions().size(); i++) {
 			returnString += "\"option" + (i + 1) + "\":" + "\"" + vue.getOptions().get(i).getTexte() + "\",";
 		}
-		returnString += "\"joueur\":\"" + vue.getJoueur().getApparence() + "\"" + "}";
+		returnString += "\"joueur\":\"" + vue.getJoueur().getPersonnage().getApparence() + "\"" + "}";
 		return returnString;
 	}
 }
