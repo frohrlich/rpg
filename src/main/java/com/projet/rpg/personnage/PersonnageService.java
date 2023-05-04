@@ -24,6 +24,12 @@ public class PersonnageService {
 				.findById(id)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Personnage non trouvé"));
 	}
+	
+	public Personnage findByNom(String name) {
+		return personnageRepository
+				.findByNom(name)
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Personnage non trouvé"));
+	}
 
 	public Personnage save(Personnage personnage) {
 		return personnageRepository.save(personnage);
