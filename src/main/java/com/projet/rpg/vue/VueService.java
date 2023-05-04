@@ -36,4 +36,8 @@ public class VueService {
 		returnString += "\"joueur\":\"" + vue.getJoueur().getPersonnage().getApparence() + "\"" + "}";
 		return returnString;
 	}
+	
+	public void update(Vue vue) {
+		this.vue = vue;
+	}
 }

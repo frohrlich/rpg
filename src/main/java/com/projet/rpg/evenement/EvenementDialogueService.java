@@ -30,7 +30,7 @@ public class EvenementDialogueService {
 		if (!obj.isNull(textFieldName)) {
 			String currentTexte = obj.getString(textFieldName);
 			myVue = new VueAvecPnj(evenementDialogue.getBackground(), currentTexte, evenementDialogue.getJoueur(), evenementDialogue.getPnj());
-			vueAvecPnjService= new VueAvecPnjService(myVue);
+			vueAvecPnjService.update(myVue);
 			vueAvecPnjService.addOption(new Option("Continuer"));
 			evenementDialogue.etape++;
 		}

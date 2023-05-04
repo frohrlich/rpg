@@ -3,12 +3,15 @@ package com.projet.rpg.vue;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import com.projet.rpg.personnage.joueur.Joueur;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Component
 @Getter
 @Setter
 @NoArgsConstructor
