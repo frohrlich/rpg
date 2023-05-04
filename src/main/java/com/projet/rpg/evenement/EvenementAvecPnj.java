@@ -1,4 +1,4 @@
-package com.projet.rpg.vue;
+package com.projet.rpg.evenement;
 
 import org.springframework.stereotype.Component;
 
@@ -13,10 +13,14 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class VueDialogue extends VueAvecPnj {
+public abstract class EvenementAvecPnj extends Evenement {
+	protected Pnj pnj;
 
-	public VueDialogue(String background, String texte, Joueur joueur, Pnj pnj) {
-		super(background, texte, joueur, pnj);
+	public EvenementAvecPnj(String background, int butinArgent, Joueur joueur, Pnj pnj) {
+		super(background, butinArgent, joueur);
+		this.pnj = pnj;
 	}
+
+	
 
 }

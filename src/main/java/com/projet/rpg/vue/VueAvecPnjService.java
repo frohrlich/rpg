@@ -1,34 +1,45 @@
 package com.projet.rpg.vue;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class VueAvecPnjService {
 
-	private VueAvecPnj vue;
+	private VueAvecPnj vueAvecPnj;
 
-	public VueAvecPnjService(VueAvecPnj vue) {
-		this.vue = vue;
+	public VueAvecPnjService(VueAvecPnj vueAvecPnj) {
+		this.vueAvecPnj = vueAvecPnj;
 	}
 
 	public void affiche() {
 		System.out
-				.println("|" + vue.getJoueur().getNom() + "|" + "----------------" + "|" + vue.getPnj().getNom() + "|");
+				.println("|" + vueAvecPnj.getJoueur().getPersonnage().getNom() + "|" + "----------------" + "|" + vueAvecPnj.getPnj().getPersonnage().getNom() + "|");
 		System.out.println();
-		System.out.println(vue.getPnj().getNom() + " : " + vue.getTexte());
+		System.out.println(vueAvecPnj.getPnj().getPersonnage().getNom() + " : " + vueAvecPnj.getTexte());
 		System.out.println();
-		for (int i = 0; i < vue.getOptions().size(); i++) {
-			System.out.println(vue.getOptions().get(i).getTexte() + " : Tapez " + (i + 1));
+		for (int i = 0; i < vueAvecPnj.getOptions().size(); i++) {
+			System.out.println(vueAvecPnj.getOptions().get(i).getTexte() + " : Tapez " + (i + 1));
 		}
 	}
 
 	// toString sends infos in json format
 	@Override
 	public String toString() {
-		String returnString = "{\"background\":\"" + vue.getBackground() + "\"," + "\"texte\":\"" + vue.getPnj().getNom() + " : " + vue.getTexte()
+		String returnString = "{\"background\":\"" + vueAvecPnj.getBackground() + "\"," + "\"texte\":\"" + vueAvecPnj.getPnj().getPersonnage().getNom() + " : " + vueAvecPnj.getTexte()
 				+ "\",";
-		for (int i = 0; i < vue.options.size(); i++) {
-			returnString += "\"option" + (i + 1) + "\":" + "\"" + vue.options.get(i).getTexte() + "\",";
+		for (int i = 0; i < vueAvecPnj.options.size(); i++) {
+			returnString += "\"option" + (i + 1) + "\":" + "\"" + vueAvecPnj.options.get(i).getTexte() + "\",";
 		}
-		returnString += "\"joueur\":\"" + vue.getJoueur().getApparence() + "\"," + "\"pnj\":\"" + vue.getPnj().getApparence() + "\""
+		returnString += "\"joueur\":\"" + vueAvecPnj.getJoueur().getPersonnage().getApparence() + "\"," + "\"pnj\":\"" + vueAvecPnj.getPnj().getPersonnage().getApparence() + "\""
 				+ "}";
 		return returnString;
+	}
+	
+	public void addOption(Option option) {
+		vueAvecPnj.getOptions().add(option);
+	}
+	
+	public void update(VueAvecPnj vueAvecPnj) {
+		this.vueAvecPnj = vueAvecPnj;
 	}
 }
