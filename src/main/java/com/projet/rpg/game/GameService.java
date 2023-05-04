@@ -53,8 +53,6 @@ public class GameService {
 	    
 		joueurService.save(Martin);
 		
-		pnjService.save(pnj);
-		
 		// Initialisation du joueur dans le jeu
 		game.setCurrentJoueur(Martin);
 		
@@ -64,7 +62,7 @@ public class GameService {
 		// Assignation du dialogue au PNJ
 		pnj.setDialogue(dialoguePnj);
 		// Update du PNJ dans la BDD, maintenant avec son dialogue
-		pnjService.update(pnj);
+		pnjService.save(pnj);
 		// Instanciation d'un événement de type dialogue
 		EvenementDialogue evenementDialogue = new EvenementDialogue("img/bg_foret.png", 200, Martin, pnj);
 		// On place l'événement dans un service
