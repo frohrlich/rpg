@@ -5,6 +5,9 @@ import org.springframework.stereotype.Service;
 
 import com.projet.rpg.evenement.EvenementDialogue;
 import com.projet.rpg.evenement.EvenementDialogueService;
+import com.projet.rpg.personnage.Personnage;
+import com.projet.rpg.personnage.Role;
+import com.projet.rpg.personnage.Sexe;
 import com.projet.rpg.personnage.joueur.Joueur;
 import com.projet.rpg.personnage.joueur.JoueurService;
 import com.projet.rpg.personnage.pnj.Pnj;
@@ -38,12 +41,23 @@ public class GameService {
 	 * Sert à initialiser le jeu
 	 */
 	public Vue initialize() {
-		// Récup. d'un joueur dans la BDD
-		Joueur felix = joueurService.findById(3);
+		
+		joueurService.deleteAll();
+		pnjService.deleteAll();
+		
+		
+		Personnage perJ = new Personnage(1,"Alex", Sexe.M, Role.Ep, 150, 1280, 2280, 300, 300, 2000, 3, "img/epeisteM.png");
+		Joueur Martin = new Joueur(1,1000,perJ);
+		Personnage perP = new Personnage(2, "Alfred", Sexe.M, Role.Ep, 150, 1280, 2280, 300, 300, 2000, 3, "img/paysanne.png");
+	    Pnj pnj = new Pnj(1,"",perP);
+	    
+		joueurService.save(Martin);
+		
+		pnjService.save(pnj);
+		
 		// Initialisation du joueur dans le jeu
-		game.setCurrentJoueur(felix);
-		// Récup. d'un PNJ dans la BDD
-		Pnj pnj = pnjService.findById(1);
+		game.setCurrentJoueur(Martin);
+		
 		// Création d'un dialogue pour le PNJ
 		String dialoguePnj = PnjService.dialogueCreation(new String[] { "Coucou je serai ton rival", "prépare toi à m'affronter", "c'est parti!" },
 				10, 0);
@@ -52,7 +66,7 @@ public class GameService {
 		// Update du PNJ dans la BDD, maintenant avec son dialogue
 		pnjService.update(pnj);
 		// Instanciation d'un événement de type dialogue
-		EvenementDialogue evenementDialogue = new EvenementDialogue("img/bg_foret.png", 200, felix, pnj);
+		EvenementDialogue evenementDialogue = new EvenementDialogue("img/bg_foret.png", 200, Martin, pnj);
 		// On place l'événement dans un service
 		evenementDialogueService.update(evenementDialogue);
 		// Initialisation de l'événement de type dialogue dans le jeu
