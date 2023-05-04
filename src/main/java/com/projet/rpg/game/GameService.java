@@ -3,8 +3,11 @@ package com.projet.rpg.game;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.projet.rpg.evenement.EvenementDialogue;
 import com.projet.rpg.evenement.EvenementDialogueService;
+import com.projet.rpg.personnage.joueur.Joueur;
 import com.projet.rpg.personnage.joueur.JoueurService;
+import com.projet.rpg.personnage.pnj.Pnj;
 import com.projet.rpg.personnage.pnj.PnjService;
 
 @Service
@@ -20,7 +23,6 @@ public class GameService {
 	private EvenementDialogueService evenementDialogueService;
 	
 	
-	
 	public GameService(Game game, JoueurService joueurService, PnjService pnjService,
 			EvenementDialogueService evenementDialogueService) {
 		super();
@@ -28,6 +30,32 @@ public class GameService {
 		this.joueurService = joueurService;
 		this.pnjService = pnjService;
 		this.evenementDialogueService = evenementDialogueService;
+	}
+	
+	public void initialize() {
+		// Game initialization
+		
+		// Récup. d'un joueur dans la BDD
+		Joueur felix = joueurService.findById(1);
+		// initialisation du joueur dans le jeu
+		game.setCurrentJoueur(felix);
+		// Récup. d'un PNJ dans la BDD
+		Pnj pnj = pnjService.findById(1);
+		// Création d'un dialogue pour le PNJ
+		String dialoguePnj = PnjService.dialogueCreation(new String[] { "Coucou je serai ton rival", "prépare toi à m'affronter", "c'est parti!" },
+				10, 0);
+		// Assignation du dialogue au PNJ
+		pnj.setDialogue(dialoguePnj);
+		// Update du PNJ dans la BDD, maintenant avec son dialogue
+		pnjService.update(pnj);
+		// Instanciation d'un événement de type dialogue
+		EvenementDialogue evenementDialogue = new EvenementDialogue("img/bg_foret.png", 200, felix, pnj);
+		// initialisation de l'événement dans le jeu
+		evenementDialogueService.update(evenementDialogue);
+		
+		game.setCurrentVue(evenementDialogueService.nextVue());
+
+		
 	}
 
 	public Game() {

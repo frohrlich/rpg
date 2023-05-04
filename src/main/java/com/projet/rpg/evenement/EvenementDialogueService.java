@@ -16,17 +16,11 @@ public class EvenementDialogueService {
 	@Autowired
 	private VueAvecPnjService vueAvecPnjService;
 	
-	
-	
-	
 	public EvenementDialogueService(EvenementDialogue evenementDialogue, VueAvecPnjService vueAvecPnjService) {
 		super();
 		this.evenementDialogue = evenementDialogue;
 		this.vueAvecPnjService = vueAvecPnjService;
 	}
-
-
-
 
 	public Vue nextVue() {
 		JSONObject obj = new JSONObject(evenementDialogue.getPnj().getDialogue());
@@ -44,5 +38,8 @@ public class EvenementDialogueService {
 		return myVue;
 	}
 	
+	public void update(EvenementDialogue evenementDialogue) {
+		this.evenementDialogue = evenementDialogue;
+	}
 	
 }

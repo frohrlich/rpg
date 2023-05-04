@@ -17,9 +17,4 @@ public class Game {
 	private Evenement currentEvenement;
 	private Vue currentVue;
 
-	
-
-
-
-
 }
