@@ -27,7 +27,7 @@ public class VueService {
 		}
 	}
 
-	// toString sends infos in json format
+	// sends infos in json format for client
 	public String toJson() {
 		String returnString = "{\"background\":\"" + vue.getBackground() + "\"," + "\"texte\":\"" + vue.getTexte() + "\",";
 		for (int i = 0; i < vue.getOptions().size(); i++) {

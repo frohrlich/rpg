@@ -242,9 +242,8 @@ function component(width, height, colorImage, x, y, type, text = null) {
 
 })();
 
-// this event listener manages incoming messages from server
-/*webSocket.addEventListener("message", (event) => {
-	const vueInfo = JSON.parse(event.data); // parse json response from server
+// updates view with response from server
+function update(vueInfo) {
 
 	// if player present on current view and different from previous view
 	if (previousVue === null || (previousVue.joueur != vueInfo.joueur && Object.hasOwn(vueInfo, 'joueur'))) {
@@ -295,7 +294,7 @@ function component(width, height, colorImage, x, y, type, text = null) {
 	}
 
 	previousVue = vueInfo;
-})*/
+}
 
 // draw a simple textbox
 function drawTextBox(ctx, text, posX, posY, tailleX, tailleY, color) {

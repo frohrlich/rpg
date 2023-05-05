@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.projet.rpg.vue.Option;
-import com.projet.rpg.vue.Vue;
 import com.projet.rpg.vue.VueAvecPnj;
 import com.projet.rpg.vue.VueAvecPnjService;
 
@@ -22,7 +21,7 @@ public class EvenementDialogueService {
 		this.vueAvecPnjService = vueAvecPnjService;
 	}
 
-	public Vue nextVue() {
+	public VueAvecPnj nextVue() {
 		JSONObject obj = new JSONObject(evenementDialogue.getPnj().getDialogue());
 		String textFieldName = "texte" + evenementDialogue.getEtape();
 		VueAvecPnj myVue = null;

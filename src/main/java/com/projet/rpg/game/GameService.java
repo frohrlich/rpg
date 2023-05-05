@@ -13,7 +13,7 @@ import com.projet.rpg.personnage.joueur.Joueur;
 import com.projet.rpg.personnage.joueur.JoueurService;
 import com.projet.rpg.personnage.pnj.Pnj;
 import com.projet.rpg.personnage.pnj.PnjService;
-import com.projet.rpg.vue.Vue;
+import com.projet.rpg.vue.VueAvecPnj;
 
 @Service
 public class GameService {
@@ -41,7 +41,7 @@ public class GameService {
 	/**
 	 * Sert à initialiser le jeu
 	 */
-	public Vue initialize() {
+	public VueAvecPnj initialize() {
 		
 		joueurService.deleteAll();
 		pnjService.deleteAll();
@@ -49,7 +49,7 @@ public class GameService {
 		
 		Personnage perJ = new Personnage(1,"Alex", Sexe.M, Role.Ep, 150, 1280, 2280, 300, 300, 2000, 3, "img/epeisteM.png");
 		Joueur Martin = new Joueur(1,1000,perJ);
-		Personnage perP = new Personnage(2, "Alfred", Sexe.M, Role.Ep, 150, 1280, 2280, 300, 300, 2000, 3, "img/paysanne.png");
+		Personnage perP = new Personnage(2, "Paysanne", Sexe.M, Role.Ep, 150, 1280, 2280, 300, 300, 2000, 3, "img/paysanne.png");
 	    Pnj pnj = new Pnj(1,"",perP);
 	    
 		joueurService.save(Martin);
@@ -80,8 +80,8 @@ public class GameService {
 	 * @param message
 	 * @return
 	 */
-	public Vue update(String message) {
-		Vue nouvelleVue = null;
+	public VueAvecPnj update(String message) {
+		VueAvecPnj nouvelleVue = null;
 		
 		JSONObject obj = new JSONObject(message);
 		String strClick = obj.getString("click");
