@@ -43,8 +43,8 @@ public class PnjService {
 		save(pnj);
 	}
 	
-	// Méthode qui prendrait la suite des textes, des options et des récompenses et
-	// qui permettrait de créer le contenu json
+	// Méthode qui prend la suite des textes, des options et des récompenses et
+	// qui permet de créer le json du dialogue
 	public static String dialogueCreation(String[] textes, int pv, int xp) {
 		
 		String contenu = "{";

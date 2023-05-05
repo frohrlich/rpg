@@ -5,33 +5,28 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.projet.rpg.vue.VueAvecPnjService;
+import com.projet.rpg.vue.Vue;
 
 @RestController
 @CrossOrigin
 public class GameController {
 	
 	private final GameService gameService;
-	private final VueAvecPnjService vueAvecPnjService;
 	
-	public GameController(GameService gameService, VueAvecPnjService vueAvecPnjService) {
+	public GameController(GameService gameService) {
 		this.gameService = gameService;
-		this.vueAvecPnjService = vueAvecPnjService;
 	}
 
 	@MessageMapping("/initialize")
 	@SendTo("/client/vue")
-	public String initialize() {
-		vueAvecPnjService.update(gameService.initialize());
-		return vueAvecPnjService.toJson();
+	public Vue initialize() {
+		return gameService.initialize();
 	}
 	
 	@MessageMapping("/update")
 	@SendTo("/client/vue")
-	public String update(String message) {
-		System.out.println(message);
-		vueAvecPnjService.update(gameService.update(message));
-		return vueAvecPnjService.toJson();
+	public Vue update(String message) {
+		return gameService.update(message);
 	}
 
 }

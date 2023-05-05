@@ -11,3 +11,6 @@ public class Main {
 	}
 
 }
+
+// maintenant il faut lancer en tapant dans le terminal :
+// mvnw spring-boot:run

@@ -22,13 +22,10 @@ public abstract class Evenement {
 	protected Joueur joueur;
 
 	public Evenement(String background, int butinArgent, Joueur joueur) {
-		super();
 		this.background = background;
 		this.butinArgent = butinArgent;
 		this.etape = 1;
 		this.joueur = joueur;
 	}
-
-	
 
 }
