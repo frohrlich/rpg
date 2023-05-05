@@ -1,16 +1,14 @@
 package com.projet.rpg.game;
 
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.projet.rpg.vue.Vue;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/game")
 public class GameController {
 	
 	private final GameService gameService;
@@ -18,14 +16,16 @@ public class GameController {
 	public GameController(GameService gameService) {
 		this.gameService = gameService;
 	}
-	
-	@GetMapping("/initialize")
+
+	@MessageMapping("/initialize")
+	@SendTo("/client/vue")
 	public Vue initialize() {
 		return gameService.initialize();
 	}
 	
-	@GetMapping("/update")
-	public Vue update(@RequestParam String message) {
+	@MessageMapping("/update")
+	@SendTo("/client/vue")
+	public Vue update(String message) {
 		return gameService.update(message);
 	}
 

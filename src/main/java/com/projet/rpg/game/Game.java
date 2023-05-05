@@ -17,6 +17,6 @@ import lombok.Setter;
 public class Game {
 	private Joueur currentJoueur;
 	private Evenement currentEvenement;
+	private Evenement nextEvenement;
 	private Vue currentVue;
-
 }

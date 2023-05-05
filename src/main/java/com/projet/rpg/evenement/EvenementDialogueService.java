@@ -15,9 +15,8 @@ public class EvenementDialogueService {
 	private EvenementDialogue evenementDialogue;
 	@Autowired
 	private VueAvecPnjService vueAvecPnjService;
-	
+
 	public EvenementDialogueService(EvenementDialogue evenementDialogue, VueAvecPnjService vueAvecPnjService) {
-		super();
 		this.evenementDialogue = evenementDialogue;
 		this.vueAvecPnjService = vueAvecPnjService;
 	}
@@ -28,8 +27,10 @@ public class EvenementDialogueService {
 		VueAvecPnj myVue = null;
 
 		if (!obj.isNull(textFieldName)) {
-			String currentTexte = obj.getString(textFieldName);
-			myVue = new VueAvecPnj(evenementDialogue.getBackground(), currentTexte, evenementDialogue.getJoueur(), evenementDialogue.getPnj());
+			String currentTexte = evenementDialogue.getPnj().getPersonnage().getNom() 
+								+ " : " + obj.getString(textFieldName);
+			myVue = new VueAvecPnj(evenementDialogue.getBackground(), currentTexte, evenementDialogue.getJoueur(),
+					evenementDialogue.getPnj());
 			vueAvecPnjService.update(myVue);
 			vueAvecPnjService.addOption(new Option("Continuer"));
 			evenementDialogue.etape++;
@@ -37,9 +38,9 @@ public class EvenementDialogueService {
 
 		return myVue;
 	}
-	
+
 	public void update(EvenementDialogue evenementDialogue) {
 		this.evenementDialogue = evenementDialogue;
 	}
-	
+
 }

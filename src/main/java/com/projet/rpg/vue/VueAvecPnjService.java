@@ -23,8 +23,7 @@ public class VueAvecPnjService {
 	}
 
 	// toString sends infos in json format
-	@Override
-	public String toString() {
+	public String toJson() {
 		String returnString = "{\"background\":\"" + vueAvecPnj.getBackground() + "\"," + "\"texte\":\"" + vueAvecPnj.getPnj().getPersonnage().getNom() + " : " + vueAvecPnj.getTexte()
 				+ "\",";
 		for (int i = 0; i < vueAvecPnj.options.size(); i++) {
@@ -42,4 +41,5 @@ public class VueAvecPnjService {
 	public void update(VueAvecPnj vueAvecPnj) {
 		this.vueAvecPnj = vueAvecPnj;
 	}
+
 }

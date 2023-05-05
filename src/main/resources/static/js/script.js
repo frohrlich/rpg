@@ -31,6 +31,16 @@ function startGame() {
 		charStartPosY,
 		"image"
 	);
+	
+	myCharacterInfo = new component(
+		120,
+		75,
+		"green",
+		5,
+		5,
+		"textBox",
+		""
+	);
 
 	myPnj = new component(
 		0,
@@ -39,6 +49,16 @@ function startGame() {
 		pnjStartPosX,
 		pnjStartPosY,
 		"image"
+	);
+	
+	myPnjInfo = new component(
+		120,
+		75,
+		"red",
+		canvasWidth - 5 - 120,
+		5,
+		"textBox",
+		""
 	);
 
 	myMainTextBox = new component(
@@ -204,13 +224,14 @@ function component(width, height, colorImage, x, y, type, text = null) {
 		// checks if user clicked somewhere on game area
 		if (myGameArea.x && myGameArea.y) {
 			if (myOption1.clicked()) {
-				wsSendMessage("option1"); // sends "option clicked" message to server
+				// Send click info to server
+				sendClick("option1");
 			}
 			else if (myOption2.clicked()) {
-				wsSendMessage("option2");
+				sendClick("option2");
 			}
 			else if (myOption3.clicked()) {
-				wsSendMessage("option3");
+				sendClick("option3");
 			}
 			myGameArea.x = 0; // reset click position
 			myGameArea.y = 0;
@@ -223,33 +244,35 @@ function component(width, height, colorImage, x, y, type, text = null) {
 		myOption3.update();
 		myCharacter.newPos();
 		myCharacter.update();
+		myCharacterInfo.update();
 		myPnj.newPos();
 		myPnj.update();
+		myPnjInfo.update();
 	}
 
 	// ______Game startup______
 
 	window.addEventListener("DOMContentLoaded", () => {
 		// checks if webSocket connexion is open
-		webSocket.addEventListener("open", (event) => {
-			startGame(); // initialize game client-side
-			updateGameArea(); // starts loop
-			wsSendMessage("startGame"); // tells server to start game
-		})
+		startGame(); // initialize game client-side
+		connect(); // connect to websocket server
+		setTimeout(() => {
+			startGameServer(); // initialize game server-side
+			updateGameArea(); // starts loop);
+		}, "500")
 	})
 
 })();
 
-// this event listener manages incoming messages from server
-webSocket.addEventListener("message", (event) => {
-	const vueInfo = JSON.parse(event.data); // parse json response from server
+// updates view with response from server
+function update(vueInfo) {
 
 	// if player present on current view and different from previous view
-	if (previousVue === null || (previousVue.joueur != vueInfo.joueur && Object.hasOwn(vueInfo, 'joueur'))) {
+	if (previousVue === null || (previousVue.joueur.personnage.apparence != vueInfo.joueur.personnage.apparence && Object.hasOwn(vueInfo, 'joueur'))) {
 		myCharacter = new component(
 			0,
 			0,
-			vueInfo.joueur,
+			vueInfo.joueur.personnage.apparence,
 			myCharacter.x,
 			myCharacter.y,
 			"image"
@@ -257,11 +280,11 @@ webSocket.addEventListener("message", (event) => {
 	}
 
 	// if pnj present on current view and different from previous view
-	if (previousVue === null || (previousVue.pnj != vueInfo.pnj && Object.hasOwn(vueInfo, 'pnj'))) {
+	if (previousVue === null || (previousVue.pnj.personnage.apparence != vueInfo.pnj.personnage.apparence && Object.hasOwn(vueInfo, 'pnj'))) {
 		myPnj = new component(
 			0,
 			0,
-			vueInfo.pnj,
+			vueInfo.pnj.personnage.apparence,
 			myPnj.x,
 			myPnj.y,
 			"image"
@@ -281,19 +304,28 @@ webSocket.addEventListener("message", (event) => {
 	}
 
 	myMainTextBox.text = vueInfo.texte;
+	myCharacterInfo.text = vueInfo.joueur.personnage.nom 
+						 + "      niveau " + vueInfo.joueur.personnage.niveau
+						 + "     " + Math.max(vueInfo.joueur.personnage.pv, 0) + "/"
+						 + vueInfo.joueur.personnage.pvMax + " pv";
+						 
+	myPnjInfo.text = vueInfo.pnj.personnage.nom 
+						 + "      niveau " + vueInfo.pnj.personnage.niveau
+						 + "     " + Math.max(vueInfo.pnj.personnage.pv, 0) + "/"
+						 + vueInfo.pnj.personnage.pvMax + " pv";
 
-	if (Object.hasOwn(vueInfo, 'option1')) {
-		myOption1.text = vueInfo.option1;
+	if (vueInfo.options.length > 0) {
+		myOption1.text = vueInfo.options[0].texte;
 	}
-	if (Object.hasOwn(vueInfo, 'option2')) {
-		myOption2.text = vueInfo.option2;
+	if (vueInfo.options.length > 1) {
+		myOption2.text = vueInfo.options[1].texte;
 	}
-	if (Object.hasOwn(vueInfo, 'option3')) {
-		myOption3.text = vueInfo.option3;
+	if (vueInfo.options.length > 2) {
+		myOption3.text = vueInfo.options[2].texte;
 	}
 
 	previousVue = vueInfo;
-})
+}
 
 // draw a simple textbox
 function drawTextBox(ctx, text, posX, posY, tailleX, tailleY, color) {
