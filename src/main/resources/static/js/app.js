@@ -19,7 +19,7 @@ function connect() {
 		setConnected(true);
 		console.log('Connected: ' + frame);
 		stompClient.subscribe('/topic/greetings', function(greeting) {
-			showGreeting(JSON.parse(greeting.body).content);
+			showGreeting(JSON.parse(greeting.body));
 		});
 	});
 }
@@ -33,7 +33,19 @@ function disconnect() {
 }
 
 function sendName() {
-	stompClient.send("/app/hello", {}, JSON.stringify({ 'name': $("#name").val() }));
+	stompClient.send("/game/hello", {}, JSON.stringify({ 'name': $("#name").val() }));
+}
+
+// __________CUSTOM METHODS__________
+
+// Tell server game is started
+function startGameServer() {
+	stompClient.send("/game/initialize", {}, JSON.stringify({ 'message': 'startGame' }));
+}
+
+// Send click info to server
+function sendClick(clickInfo) {
+	stompClient.send("/game/update", {}, JSON.stringify({ 'click': clickInfo }));
 }
 
 function showGreeting(message) {

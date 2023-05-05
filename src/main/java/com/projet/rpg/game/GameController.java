@@ -1,32 +1,37 @@
 package com.projet.rpg.game;
 
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.projet.rpg.vue.Vue;
+import com.projet.rpg.vue.VueService;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/game")
 public class GameController {
 	
 	private final GameService gameService;
+	private final VueService vueService;
 	
-	public GameController(GameService gameService) {
+	public GameController(GameService gameService, VueService vueService) {
 		this.gameService = gameService;
+		this.vueService = vueService;
+	}
+
+	@MessageMapping("/initialize")
+	@SendTo("/topic/greetings")
+	public String initialize() {
+		vueService.update(gameService.initialize());
+		return vueService.toJson();
 	}
 	
-	@GetMapping("/initialize")
-	public Vue initialize() {
-		return gameService.initialize();
-	}
-	
-	@GetMapping("/update")
-	public Vue update(@RequestParam String message) {
-		return gameService.update(message);
+	@MessageMapping("/update")
+	@SendTo("/topic/greetings")
+	public String update(String message) {
+		System.out.println(message);
+		vueService.update(gameService.update(message));
+		return vueService.toJson();
 	}
 
 }

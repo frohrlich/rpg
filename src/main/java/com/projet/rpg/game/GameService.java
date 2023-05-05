@@ -1,5 +1,6 @@
 package com.projet.rpg.game;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -81,7 +82,11 @@ public class GameService {
 	 */
 	public Vue update(String message) {
 		Vue nouvelleVue = null;
-		switch (message) {
+		
+		JSONObject obj = new JSONObject(message);
+		String strClick = obj.getString("click");
+		
+		switch (strClick) {
 		case "option1":
 			nouvelleVue = evenementDialogueService.nextVue();
 			if(nouvelleVue != null) {

@@ -14,7 +14,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 		// destination for messages to the clients
 		config.enableSimpleBroker("/topic");
 		// destination for messages from the clients (game?)
-		config.setApplicationDestinationPrefixes("/app");
+		config.setApplicationDestinationPrefixes("/game");
 	}
 
 	// this method uses fallbacks in case of websockets not available

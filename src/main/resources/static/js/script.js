@@ -204,13 +204,14 @@ function component(width, height, colorImage, x, y, type, text = null) {
 		// checks if user clicked somewhere on game area
 		if (myGameArea.x && myGameArea.y) {
 			if (myOption1.clicked()) {
-				wsSendMessage("option1"); // sends "option clicked" message to server
+				// Send click info to server
+				sendClick("option1");
 			}
 			else if (myOption2.clicked()) {
-				wsSendMessage("option2");
+				sendClick("option2");
 			}
 			else if (myOption3.clicked()) {
-				wsSendMessage("option3");
+				sendClick("option3");
 			}
 			myGameArea.x = 0; // reset click position
 			myGameArea.y = 0;
@@ -231,17 +232,18 @@ function component(width, height, colorImage, x, y, type, text = null) {
 
 	window.addEventListener("DOMContentLoaded", () => {
 		// checks if webSocket connexion is open
-		webSocket.addEventListener("open", (event) => {
-			startGame(); // initialize game client-side
-			updateGameArea(); // starts loop
-			wsSendMessage("startGame"); // tells server to start game
-		})
+		startGame(); // initialize game client-side
+		connect(); // connect to websocket server
+		setTimeout(() => {
+			startGameServer(); // initialize game server-side
+			updateGameArea(); // starts loop);
+		}, "500")
 	})
 
 })();
 
 // this event listener manages incoming messages from server
-webSocket.addEventListener("message", (event) => {
+/*webSocket.addEventListener("message", (event) => {
 	const vueInfo = JSON.parse(event.data); // parse json response from server
 
 	// if player present on current view and different from previous view
@@ -293,7 +295,7 @@ webSocket.addEventListener("message", (event) => {
 	}
 
 	previousVue = vueInfo;
-})
+})*/
 
 // draw a simple textbox
 function drawTextBox(ctx, text, posX, posY, tailleX, tailleY, color) {
