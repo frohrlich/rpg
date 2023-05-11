@@ -253,7 +253,6 @@ function component(width, height, colorImage, x, y, type, text = null) {
 	// ______Game startup______
 
 	window.addEventListener("DOMContentLoaded", () => {
-		// checks if webSocket connexion is open
 		startGame(); // initialize game client-side
 		connect(); // connect to websocket server
 		setTimeout(() => {

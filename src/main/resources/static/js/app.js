@@ -49,6 +49,8 @@ function sendClick(clickInfo) {
 	stompClient.send("/game/update", {}, JSON.stringify({ 'click': clickInfo }));
 }
 
+// ___________________________________
+
 function showGreeting(message) {
 	$("#greetings").append("<tr><td>" + message + "</td></tr>");
 }
