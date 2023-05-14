@@ -33,7 +33,7 @@ public class EvenementCombatService {
 		Joueur joueur = evenementCombat.getJoueur();
 
 		// if fight just started : return welcome view
-		if (evenementCombat.etape == 1) {
+		if (evenementCombat.etape == 0) {
 			String welcomeMessage = "Le combat contre " + pnj.getPersonnage().getNom() + " commence !";
 			VueAvecPnj welcomeVue = new VueAvecPnj(evenementCombat.getBackground(), welcomeMessage, joueur, pnj);
 			vueAvecPnjService.update(welcomeVue);
@@ -94,7 +94,6 @@ public class EvenementCombatService {
 
 		vueAvecPnjService.update(myVue);
 		vueAvecPnjService.addOption(new Option("Attaquer"));
-		evenementCombat.etape++;
 
 		return myVue;
 	}

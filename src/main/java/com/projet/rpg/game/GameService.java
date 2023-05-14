@@ -1,5 +1,8 @@
 package com.projet.rpg.game;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +17,9 @@ import com.projet.rpg.personnage.joueur.Joueur;
 import com.projet.rpg.personnage.joueur.JoueurService;
 import com.projet.rpg.personnage.pnj.Pnj;
 import com.projet.rpg.personnage.pnj.PnjService;
+import com.projet.rpg.vue.Option;
 import com.projet.rpg.vue.Vue;
+import com.projet.rpg.vue.VueService;
 
 @Service
 public class GameService {
@@ -24,24 +29,28 @@ public class GameService {
 	private JoueurService joueurService;
 	private PnjService pnjService;
 	private EvenementService evenementService;
+	private VueService vueService;
 
 	public GameService(Game game, JoueurService joueurService, PnjService pnjService,
-			EvenementService evenementService) {
+			EvenementService evenementService, VueService vueService) {
 		this.game = game;
 		this.joueurService = joueurService;
 		this.pnjService = pnjService;
 		this.evenementService = evenementService;
+		this.vueService = vueService;
 	}
 
 	/**
 	 * Sert à initialiser le jeu
 	 */
 	public Vue initialize() {
+		game.setEtape(0);
+		
 		joueurService.deleteAll();
 		pnjService.deleteAll();
 
 		// on crée les personnages à la main pour tester
-		Personnage perJ = new Personnage(1, "Martin", Sexe.M, Role.Ep, 1, 100, 100, 15, 5, 5, 10, "img/epeisteM.png");
+		Personnage perJ = new Personnage(1, "Martin", Sexe.M, Role.Ep, 1, 100, 100, 12, 5, 5, 10, "img/epeisteM.png");
 		Joueur martin = new Joueur(1, 1000, perJ);
 		Personnage perP = new Personnage(2, "Paysanne", Sexe.F, Role.Ep, 1, 100, 100, 10, 5, 5, 10, "img/paysanne.png");
 		Pnj pnj = new Pnj(1, "", true, perP);
@@ -60,25 +69,16 @@ public class GameService {
 		// Update du PNJ dans la BDD, maintenant avec son dialogue
 		pnjService.save(pnj);
 
-		// Instanciation d'un événement de type dialogue
-		EvenementDialogue evenementDialogue = new EvenementDialogue("img/bg_foret.png", 200, martin, pnj);
-		// Ajout de l'événement de type dialogue dans le jeu
-		this.addEvenement(evenementDialogue);
-
-		// création de l'événement combat qui suivra le dialogue
-		EvenementCombat evenementCombat = new EvenementCombat("img/bg_volcan.png", 200, martin, pnj);
-		this.addEvenement(evenementCombat);
-
-		// on récupère ensuite le premier événement de la liste
-		game.setCurrentEvenement(game.getEvenements().get(game.getEtape()));
+		// génération de la rencontre avec le PNJ
+		// si le pnj est hostile, la rencontre sera Dialogue + Combat
+		// s'il ne l'est pas, la rencontre sera seulement Dialogue
+		game.setEvenements(generateMeeting(pnj));
 
 		// on le donne au service
-		evenementService.update(game.getCurrentEvenement());
+		evenementService.update(this.currentEvenement());
 
-		// Initialisation de la vue dans le jeu
-		game.setCurrentVue(evenementService.nextVue());
-
-		return game.getCurrentVue();
+		// on renvoie la vue de bienvenue dans le jeu
+		return welcomeVue();
 	}
 
 	/**
@@ -116,7 +116,6 @@ public class GameService {
 		return game.getCurrentVue();
 	}
 
-	
 	// add an evenement to the list
 	public void addEvenement(Evenement evenement) {
 		game.getEvenements().add(evenement);
@@ -128,11 +127,44 @@ public class GameService {
 		game.setEtape(game.getEtape() + 1);
 		// verify that we have not reached the end of the event list
 		if (game.getEtape() < game.getEvenements().size()) {
-			evenementService.update(game.getEvenements().get(game.getEtape()));
+			evenementService.update(this.currentEvenement());
 			return true;
 		} else {
 			return false;
 		}
 	}
 
+	// returns current event from list of events
+	public Evenement currentEvenement() {
+		return game.getEvenements().get(game.getEtape());
+	}
+
+	// generates a meeting with a pnj
+	public List<Evenement> generateMeeting(Pnj pnj) {
+		List<Evenement> meeting = new ArrayList<Evenement>();
+
+		// Instanciation d'un événement de type dialogue
+		EvenementDialogue evenementDialogue = new EvenementDialogue("img/bg_foret.png", 0, game.getCurrentJoueur(),
+				pnj);
+		// Ajout de l'événement de type dialogue dans le jeu
+		meeting.add(evenementDialogue);
+
+		if (pnj.isHostile()) {
+			// création de l'événement combat qui suivra le dialogue
+			EvenementCombat evenementCombat = new EvenementCombat("img/bg_volcan.png", pnj.getPersonnage().getArgent(),
+					game.getCurrentJoueur(), pnj);
+			meeting.add(evenementCombat);
+		}
+
+		return meeting;
+	}
+
+	// Vue d'accueil dans le jeu
+	public Vue welcomeVue() {
+		String currentTexte = "Bienvenue dans notre super RPG !";
+		Vue myVue = new Vue("img/bg_foret.png", currentTexte, game.getCurrentJoueur());
+		vueService.update(myVue);
+		vueService.addOption(new Option("Commencer l'aventure"));
+		return myVue;
+	}
 }

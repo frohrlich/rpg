@@ -1,6 +1,5 @@
 package com.projet.rpg.game;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -17,13 +16,11 @@ import lombok.Setter;
 @Setter
 public class Game {
 	private Joueur currentJoueur;
-	private Evenement currentEvenement;
 	private List<Evenement> evenements;
 	private int etape;
 	private Vue currentVue;
 	
 	public Game() {
 		this.etape = 0;
-		this.evenements = new ArrayList<Evenement>();
 	}
 }

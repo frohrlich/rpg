@@ -21,6 +21,13 @@ let directionChar = 1,
 	directionPnj = -1; // starting moving direction 1 right, -1 left
 let charactersAnimationFrameRate = 75;
 
+// ______Game startup______
+
+window.addEventListener("DOMContentLoaded", () => {
+	startGame(); // initialize game client-side
+	connect(); // connect to websocket server
+})
+
 function startGame() {
 
 	myCharacter = new component(
@@ -29,9 +36,9 @@ function startGame() {
 		"",
 		charStartPosX,
 		charStartPosY,
-		"image"
+		"image",
 	);
-	
+
 	myCharacterInfo = new component(
 		120,
 		75,
@@ -50,7 +57,7 @@ function startGame() {
 		pnjStartPosY,
 		"image"
 	);
-	
+
 	myPnjInfo = new component(
 		120,
 		75,
@@ -58,7 +65,8 @@ function startGame() {
 		canvasWidth - 5 - 120,
 		5,
 		"textBox",
-		""
+		"",
+		hidden = true
 	);
 
 	myMainTextBox = new component(
@@ -98,6 +106,7 @@ function startGame() {
 		"textBox",
 		""
 	);
+	
 	myBackground = new component(
 		canvasWidth,
 		canvasHeight,
@@ -128,8 +137,9 @@ let myGameArea = {
 };
 
 // any component of the game (sprite, dialog box...)
-function component(width, height, colorImage, x, y, type, text = null) {
+function component(width, height, colorImage, x, y, type, text = null, hidden = false) {
 	this.type = type;
+	this.hidden = hidden;
 
 	if (type == "image" || type == "background") {
 		this.image = new Image();
@@ -153,18 +163,22 @@ function component(width, height, colorImage, x, y, type, text = null) {
 	this.y = y;
 	this.text = text;
 	this.update = function() {
-		ctx = myGameArea.context;
-		if (this.type == "image" || this.type == "background") {
-			ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
-		} else if (this.type == "text") {
-			ctx.font = this.width + " " + this.height;
-			ctx.fillStyle = colorImage;
-			ctx.fillText(this.text, this.x, this.y);
-		} else if (this.type == "textBox") {
-			drawTextBox(ctx, this.text, this.x, this.y, this.width, this.height, this.color);
-		} else {
-			ctx.fillStyle = colorImage;
-			ctx.fillRect(this.x, this.y, this.width, this.height);
+		// first, check if component is hidden
+		// if so, don't draw it
+		if (!this.hidden) {
+			ctx = myGameArea.context;
+			if (this.type == "image" || this.type == "background") {
+				ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+			} else if (this.type == "text") {
+				ctx.font = this.width + " " + this.height;
+				ctx.fillStyle = colorImage;
+				ctx.fillText(this.text, this.x, this.y);
+			} else if (this.type == "textBox") {
+				drawTextBox(ctx, this.text, this.x, this.y, this.width, this.height, this.color);
+			} else {
+				ctx.fillStyle = colorImage;
+				ctx.fillRect(this.x, this.y, this.width, this.height);
+			}
 		}
 	};
 	this.clicked = function() {
@@ -185,113 +199,118 @@ function component(width, height, colorImage, x, y, type, text = null) {
 }
 
 // __________MAIN LOOP__________
-(() => {
-	function updateGameArea(timestamp) {
-		if (start === undefined) {
-			start = timestamp;
-			lastFrameTimeStamp = timestamp;
-		}
-		//const elapsed = timestamp - start;
 
-		myGameArea.stopMain = window.requestAnimationFrame(updateGameArea);
+function updateGameArea(timestamp) {
+	if (start === undefined) {
+		start = timestamp;
+		lastFrameTimeStamp = timestamp;
+	}
+	//const elapsed = timestamp - start;
 
-		myGameArea.clear();
+	myGameArea.stopMain = window.requestAnimationFrame(updateGameArea);
 
-		myCharacter.speedX = 0;
-		myCharacter.speedY = 0;
-		myPnj.speedX = 0;
-		myPnj.speedY = 0;
+	myGameArea.clear();
 
-		// CHARACTERS ANIMATION
-		if (timestamp - lastFrameTimeStamp >= charactersAnimationFrameRate) {
-			if (
-				myCharacter.x > charStartPosX + limitMovementX ||
-				myCharacter.x < charStartPosX
-			) {
-				directionChar *= -1; // change direction if out of bound
-			}
+	myCharacter.speedX = 0;
+	myCharacter.speedY = 0;
+	myPnj.speedX = 0;
+	myPnj.speedY = 0;
 
-			// moving animation pnj
-			if (myPnj.x < pnjStartPosX - limitMovementX || myPnj.x > pnjStartPosX) {
-				directionPnj *= -1; // change direction if out of bound
-			}
-
-			myCharacter.speedX += directionChar;
-			myPnj.speedX += directionPnj;
-			lastFrameTimeStamp = timestamp; // time of last animation frame
+	// CHARACTERS ANIMATION
+	if (timestamp - lastFrameTimeStamp >= charactersAnimationFrameRate) {
+		if (
+			myCharacter.x > charStartPosX + limitMovementX ||
+			myCharacter.x < charStartPosX
+		) {
+			directionChar *= -1; // change direction if out of bound
 		}
 
-		// checks if user clicked somewhere on game area
-		if (myGameArea.x && myGameArea.y) {
-			if (myOption1.clicked()) {
-				// Send click info to server
-				sendClick("option1");
-			}
-			else if (myOption2.clicked()) {
-				sendClick("option2");
-			}
-			else if (myOption3.clicked()) {
-				sendClick("option3");
-			}
-			myGameArea.x = 0; // reset click position
-			myGameArea.y = 0;
+		// moving animation pnj
+		if (myPnj.x < pnjStartPosX - limitMovementX || myPnj.x > pnjStartPosX) {
+			directionPnj *= -1; // change direction if out of bound
 		}
 
-		myBackground.update();
-		myMainTextBox.update();
-		myOption1.update();
-		myOption2.update();
-		myOption3.update();
-		myCharacter.newPos();
-		myCharacter.update();
-		myCharacterInfo.update();
-		myPnj.newPos();
-		myPnj.update();
-		myPnjInfo.update();
+		myCharacter.speedX += directionChar;
+		myPnj.speedX += directionPnj;
+		lastFrameTimeStamp = timestamp; // time of last animation frame
 	}
 
-	// ______Game startup______
+	// checks if user clicked somewhere on game area
+	if (myGameArea.x && myGameArea.y) {
+		if (myOption1.clicked()) {
+			// Send click info to server
+			sendClick("option1");
+		}
+		else if (myOption2.clicked()) {
+			sendClick("option2");
+		}
+		else if (myOption3.clicked()) {
+			sendClick("option3");
+		}
+		myGameArea.x = 0; // reset click position
+		myGameArea.y = 0;
+	}
 
-	window.addEventListener("DOMContentLoaded", () => {
-		startGame(); // initialize game client-side
-		connect(); // connect to websocket server
-		setTimeout(() => {
-			startGameServer(); // initialize game server-side
-			updateGameArea(); // starts loop);
-		}, "500")
-	})
-
-})();
+	myBackground.update();
+	myMainTextBox.update();
+	myOption1.update();
+	myOption2.update();
+	myOption3.update();
+	myCharacter.newPos();
+	myCharacter.update();
+	myCharacterInfo.update();
+	myPnj.newPos();
+	myPnj.update();
+	myPnjInfo.update();
+}
 
 // updates view with response from server
 function update(vueInfo) {
 
-	// if player present on current view and different from previous view
-	if (previousVue === null || (previousVue.joueur.personnage.apparence != vueInfo.joueur.personnage.apparence && Object.hasOwn(vueInfo, 'joueur'))) {
-		myCharacter = new component(
-			0,
-			0,
-			vueInfo.joueur.personnage.apparence,
-			myCharacter.x,
-			myCharacter.y,
-			"image"
-		);
+	// if player present on current view we show its infobox
+	if (Object.hasOwn(vueInfo, 'joueur')) {
+		myCharacterInfo.text = vueInfo.joueur.personnage.nom
+			+ "      niveau " + vueInfo.joueur.personnage.niveau
+			+ "     " + Math.max(vueInfo.joueur.personnage.pv, 0) + "/"
+			+ vueInfo.joueur.personnage.pvMax + " pv";
+		// if player image different from previous view we refresh the image
+		if (previousVue === null || !Object.hasOwn(previousVue, 'joueur') || (previousVue.joueur.personnage.apparence != vueInfo.joueur.personnage.apparence)) {
+			myCharacter = new component(
+				0,
+				0,
+				vueInfo.joueur.personnage.apparence,
+				myCharacter.x,
+				myCharacter.y,
+				"image"
+			);
+		}
 	}
 
-	// if pnj present on current view and different from previous view
-	if (previousVue === null || (previousVue.pnj.personnage.apparence != vueInfo.pnj.personnage.apparence && Object.hasOwn(vueInfo, 'pnj'))) {
-		myPnj = new component(
-			0,
-			0,
-			vueInfo.pnj.personnage.apparence,
-			myPnj.x,
-			myPnj.y,
-			"image"
-		);
+	// if pnj present on current view we show its infobox
+	if (Object.hasOwn(vueInfo, 'pnj')) {
+		myPnjInfo.hidden = false;
+		myPnjInfo.text = vueInfo.pnj.personnage.nom
+			+ "      niveau " + vueInfo.pnj.personnage.niveau
+			+ "     " + Math.max(vueInfo.pnj.personnage.pv, 0) + "/"
+			+ vueInfo.pnj.personnage.pvMax + " pv";
+		// if pnj image different from previous view we refresh the image
+		if (previousVue === null || !Object.hasOwn(previousVue, 'pnj') || (previousVue.pnj.personnage.apparence != vueInfo.pnj.personnage.apparence)) {
+			myPnj = new component(
+				0,
+				0,
+				vueInfo.pnj.personnage.apparence,
+				myPnj.x,
+				myPnj.y,
+				"image"
+			);
+		}
+	} else {
+		// if pnj not present, we hide its infobox
+		myPnjInfo.hidden = true;
 	}
 
-	// if background present on current view and different from previous view
-	if (previousVue === null || (previousVue.background != vueInfo.background && Object.hasOwn(vueInfo, 'background'))) {
+	// same for background : refresh only if changed
+	if (Object.hasOwn(vueInfo, 'background') && (previousVue === null || (previousVue.background != vueInfo.background))) {
 		myBackground = new component(
 			canvasWidth,
 			canvasHeight,
@@ -303,15 +322,6 @@ function update(vueInfo) {
 	}
 
 	myMainTextBox.text = vueInfo.texte;
-	myCharacterInfo.text = vueInfo.joueur.personnage.nom 
-						 + "      niveau " + vueInfo.joueur.personnage.niveau
-						 + "     " + Math.max(vueInfo.joueur.personnage.pv, 0) + "/"
-						 + vueInfo.joueur.personnage.pvMax + " pv";
-						 
-	myPnjInfo.text = vueInfo.pnj.personnage.nom 
-						 + "      niveau " + vueInfo.pnj.personnage.niveau
-						 + "     " + Math.max(vueInfo.pnj.personnage.pv, 0) + "/"
-						 + vueInfo.pnj.personnage.pvMax + " pv";
 
 	if (vueInfo.options.length > 0) {
 		myOption1.text = vueInfo.options[0].texte;
