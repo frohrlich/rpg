@@ -26,16 +26,6 @@ public class VueService {
 			System.out.println(vue.getOptions().get(i).getTexte() + " : Tapez " + (i + 1));
 		}
 	}
-
-	// sends infos in json format for client
-	public String toJson() {
-		String returnString = "{\"background\":\"" + vue.getBackground() + "\"," + "\"texte\":\"" + vue.getTexte() + "\",";
-		for (int i = 0; i < vue.getOptions().size(); i++) {
-			returnString += "\"option" + (i + 1) + "\":" + "\"" + vue.getOptions().get(i).getTexte() + "\",";
-		}
-		returnString += "\"joueur\":\"" + vue.getJoueur().getPersonnage().getApparence() + "\"" + "}";
-		return returnString;
-	}
 	
 	public void update(Vue vue) {
 		this.vue = vue;

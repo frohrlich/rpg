@@ -21,18 +21,6 @@ public class VueAvecPnjService {
 			System.out.println(vueAvecPnj.getOptions().get(i).getTexte() + " : Tapez " + (i + 1));
 		}
 	}
-
-	// toString sends infos in json format
-	public String toJson() {
-		String returnString = "{\"background\":\"" + vueAvecPnj.getBackground() + "\"," + "\"texte\":\"" + vueAvecPnj.getPnj().getPersonnage().getNom() + " : " + vueAvecPnj.getTexte()
-				+ "\",";
-		for (int i = 0; i < vueAvecPnj.options.size(); i++) {
-			returnString += "\"option" + (i + 1) + "\":" + "\"" + vueAvecPnj.options.get(i).getTexte() + "\",";
-		}
-		returnString += "\"joueur\":\"" + vueAvecPnj.getJoueur().getPersonnage().getApparence() + "\"," + "\"pnj\":\"" + vueAvecPnj.getPnj().getPersonnage().getApparence() + "\""
-				+ "}";
-		return returnString;
-	}
 	
 	public void addOption(Option option) {
 		vueAvecPnj.getOptions().add(option);
