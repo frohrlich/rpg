@@ -7,13 +7,11 @@ import com.projet.rpg.personnage.joueur.Joueur;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Component
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
 public abstract class Evenement {
 
 	protected String background;

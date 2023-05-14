@@ -1,6 +1,5 @@
 package com.projet.rpg.evenement;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.projet.rpg.personnage.PersonnageService;
@@ -15,7 +14,6 @@ import com.projet.rpg.vue.VueAvecPnjService;
 public class EvenementCombatService {
 
 	private EvenementCombat evenementCombat;
-	@Autowired
 	private VueAvecPnjService vueAvecPnjService;
 	private PersonnageService personnageService;
 
@@ -99,6 +97,10 @@ public class EvenementCombatService {
 		evenementCombat.etape++;
 
 		return myVue;
+	}
+	
+	public void update(Evenement evenement) {
+		this.evenementCombat = (EvenementCombat) evenement;
 	}
 
 }

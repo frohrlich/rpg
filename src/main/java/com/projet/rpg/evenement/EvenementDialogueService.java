@@ -1,7 +1,6 @@
 package com.projet.rpg.evenement;
 
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.projet.rpg.vue.Option;
@@ -13,7 +12,6 @@ import com.projet.rpg.vue.VueAvecPnjService;
 public class EvenementDialogueService {
 
 	private EvenementDialogue evenementDialogue;
-	@Autowired
 	private VueAvecPnjService vueAvecPnjService;
 
 	public EvenementDialogueService(EvenementDialogue evenementDialogue, VueAvecPnjService vueAvecPnjService) {
@@ -39,8 +37,8 @@ public class EvenementDialogueService {
 		return myVue;
 	}
 
-	public void update(EvenementDialogue evenementDialogue) {
-		this.evenementDialogue = evenementDialogue;
+	public void update(Evenement evenement) {
+		this.evenementDialogue = (EvenementDialogue) evenement;
 	}
 
 }

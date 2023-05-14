@@ -31,16 +31,10 @@ public class Pnj {
 	@Column(length = 8192, nullable=true)
 	private String dialogue;
 	
+	private boolean isHostile;
+	
 	@OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "personnage_id", referencedColumnName = "id")
 	private Personnage personnage;
-//	
-//	@JsonIgnore
-//	@OneToOne(mappedBy = "pnj")
-//    private Allie allie;
-//	
-//	@JsonIgnore
-//	@OneToOne(mappedBy = "pnj")
-//    private Ennemi ennemi;
-//	
+
 }
