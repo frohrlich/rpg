@@ -19,12 +19,4 @@ public class EvenementDialogue extends EvenementAvecPnj {
 		super(background, butinArgent, joueur, pnj);
 	}
 
-//	public void modifieCaracs() {
-//		JSONObject obj = new JSONObject(this.getPnj().getDialogue());
-//		int pv=obj.getInt("pv");
-//		
-//		monDialogue  = this.Pnj.dialogue;
-//		monJoueur.setPv(monJoueur.getPv() + pv);
-//		monJoueur.setXp(monJoueur.getXp() + monDialogue.getXp());
-//	}
 }

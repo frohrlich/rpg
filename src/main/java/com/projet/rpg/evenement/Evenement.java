@@ -7,13 +7,11 @@ import com.projet.rpg.personnage.joueur.Joueur;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Component
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
 public abstract class Evenement {
 
 	protected String background;
@@ -24,7 +22,7 @@ public abstract class Evenement {
 	public Evenement(String background, int butinArgent, Joueur joueur) {
 		this.background = background;
 		this.butinArgent = butinArgent;
-		this.etape = 1;
+		this.etape = 0;
 		this.joueur = joueur;
 	}
 
