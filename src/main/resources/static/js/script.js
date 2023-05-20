@@ -2,6 +2,12 @@
  * Canvas game script
  */
 
+let testCharPosX = 0;
+let testCharPosY = 0;
+
+// move arrows size
+let arrowSize = 60;
+
 let canvasWidth = 600;
 let canvasHeight = 400;
 let textfontSize = 20; // font size for main text box and options
@@ -115,17 +121,61 @@ function startGame() {
 		0,
 		"background"
 	);
-	
+
 	myMap = new component(
 		0,
 		0,
 		"",
-		canvasWidth-185,
+		canvasWidth - 185,
 		5,
 		"map",
 		"",
-		hidden=true,
-		mapInfo=[]
+		hidden = true,
+		mapInfo = []
+	);
+
+	myLeftMoveArrow = new component(
+		0,
+		0,
+		"img/left-arrow.png",
+		0,
+		canvasHeight / 2,
+		"image",
+		"",
+		hidden = true
+	);
+
+	myDownMoveArrow = new component(
+		0,
+		0,
+		"img/down-arrow.png",
+		canvasWidth / 2 - arrowSize / 2,
+		interfacePosY-50,
+		"image",
+		"",
+		hidden = true
+	);
+
+	myUpMoveArrow = new component(
+		0,
+		0,
+		"img/up-arrow.png",
+		canvasWidth / 2 - arrowSize / 2,
+		0,
+		"image",
+		"",
+		hidden = true
+	);
+
+	myRightMoveArrow = new component(
+		0,
+		0,
+		"img/right-arrow.png",
+		canvasWidth - arrowSize,
+		canvasHeight / 2,
+		"image",
+		"",
+		hidden = true
 	);
 
 	myGameArea.start();
@@ -149,7 +199,12 @@ let myGameArea = {
 };
 
 // any component of the game (sprite, dialog box...)
-function component(width, height, colorImage, x, y, type, text = null, hidden = false, mapInfo=null) {
+function component(width, height, colorImage, x, y, type, text = null, hidden = false, mapInfo = null, charPosX = 0, charPosY = 0) {
+
+	// positions of character on game map
+	this.charPosX = charPosX;
+	this.charPosY = charPosY;
+
 	this.type = type;
 	this.hidden = hidden;
 	this.mapInfo = mapInfo;
@@ -189,7 +244,15 @@ function component(width, height, colorImage, x, y, type, text = null, hidden = 
 			} else if (this.type == "textBox") {
 				drawTextBox(ctx, this.text, this.x, this.y, this.width, this.height, this.color);
 			} else if (this.type == "map") {
-				drawMap(ctx, this.x, this.y, this.mapInfo, 2, 1);
+				drawMap(ctx, this.x, this.y, this.mapInfo, this.charPosX, this.charPosY);
+			} else if (this.type == "leftMoveArrow") {
+				drawLeftMoveArrow(ctx, this.x, this.y);
+			} else if (this.type == "downMoveArrow") {
+				drawDownMoveArrow(ctx, this.x, this.y);
+			} else if (this.type == "upMoveArrow") {
+				drawUpMoveArrow(ctx, this.x, this.y);
+			} else if (this.type == "rightMoveArrow") {
+				drawRightMoveArrow(ctx, this.x, this.y);
 			} else {
 				ctx.fillStyle = colorImage;
 				ctx.fillRect(this.x, this.y, this.width, this.height);
@@ -197,6 +260,11 @@ function component(width, height, colorImage, x, y, type, text = null, hidden = 
 		}
 	};
 	this.clicked = function() {
+		// first check if hidden
+		// if so, can't be clicked
+		if(this.hidden) {
+			return false;
+		}
 		var myleft = this.x;
 		var myright = this.x + (this.width);
 		var mytop = this.y;
@@ -262,6 +330,22 @@ function updateGameArea(timestamp) {
 		else if (myOption3.clicked()) {
 			sendClick("option3");
 		}
+		else if (myLeftMoveArrow.clicked()) {
+			testCharPosX--;
+			sendClick("flecheO");
+		}
+		else if (myRightMoveArrow.clicked()) {
+			testCharPosX++;
+			sendClick("flecheE");
+		}
+		else if (myUpMoveArrow.clicked()) {
+			testCharPosY--;
+			sendClick("flecheN");
+		}
+		else if (myDownMoveArrow.clicked()) {
+			testCharPosY++;
+			sendClick("flecheS");
+		}
 		myGameArea.x = 0; // reset click position
 		myGameArea.y = 0;
 	}
@@ -272,6 +356,10 @@ function updateGameArea(timestamp) {
 	myOption2.update();
 	myOption3.update();
 	myMap.update();
+	myLeftMoveArrow.update();
+	myDownMoveArrow.update();
+	myUpMoveArrow.update();
+	myRightMoveArrow.update();
 	myCharacter.newPos();
 	myCharacter.update();
 	myCharacterInfo.update();
@@ -284,8 +372,35 @@ function updateGameArea(timestamp) {
 function update(vueInfo) {
 
 	let testMap = [["Foret", "Foret", "Montagne"],
-				   ["Volcan", "Village", "Foret"],
-				   ["Plage", "Plage", "Plage"]];
+	["Volcan", "Village", "Foret"],
+	["Plage", "Plage", "Plage"]];
+
+	myMap.charPosX = testCharPosX;
+	myMap.charPosY = testCharPosY;
+
+	// if not already at left border of the map
+	if (myMap.charPosX != 0) {
+		// then show left move arrow
+		myLeftMoveArrow.hidden = false;
+	} else {
+		myLeftMoveArrow.hidden = true;
+	}
+	// same for right side of the map
+	if (myMap.charPosX != testMap.length - 1) {
+		myRightMoveArrow.hidden = false;
+	} else {
+		myRightMoveArrow.hidden = true;
+	}
+	if (myMap.charPosY != 0) {
+		myUpMoveArrow.hidden = false;
+	} else {
+		myUpMoveArrow.hidden = true;
+	}
+	if (myMap.charPosY != testMap[0].length - 1) {
+		myDownMoveArrow.hidden = false;
+	} else {
+		myDownMoveArrow.hidden = true;
+	}
 
 	myMap.mapInfo = testMap;
 	myMap.hidden = false;
@@ -312,6 +427,10 @@ function update(vueInfo) {
 	// if pnj present on current view we show its infobox
 	if (Object.hasOwn(vueInfo, 'pnj')) {
 		myPnjInfo.hidden = false;
+		myLeftMoveArrow.hidden = true;
+		myDownMoveArrow.hidden = true;
+		myUpMoveArrow.hidden = true;
+		myRightMoveArrow.hidden = true;
 		myMap.hidden = true; // hide map if pnj present
 		myPnjInfo.text = vueInfo.pnj.personnage.nom
 			+ "      niveau " + vueInfo.pnj.personnage.niveau
@@ -445,7 +564,7 @@ function drawMap(ctx, x, y, map, posX, posY) {
 					icon = "🗻";
 					break;
 				case "Volcan":
-					ctx.fillStyle = "red";
+					ctx.fillStyle = "DarkRed";
 					icon = "🌋";
 					break;
 				case "Plage":
@@ -458,18 +577,42 @@ function drawMap(ctx, x, y, map, posX, posY) {
 					break;
 				default:
 			}
-			let xPos = x+boxSize*j;
-			let yPos = y+boxSize*i;
+			let xPos = x + boxSize * j;
+			let yPos = y + boxSize * i;
 			ctx.fillRect(xPos, yPos, boxSize, boxSize);
-			if(i == posY && j == posX) {
+			if (i == posY && j == posX) {
 				icon = "📍";
 				let width = 4;
 				ctx.strokeStyle = "Fuchsia";
 				ctx.lineWidth = width;
-				ctx.strokeRect(xPos + width/2, yPos + width/2, boxSize - width, boxSize - width);
+				ctx.strokeRect(xPos + width / 2, yPos + width / 2, boxSize - width, boxSize - width);
 			}
-			ctx.fillText(icon, xPos - iconSize/8 + 2, yPos + iconSize - 3)
+			ctx.fillText(icon, xPos - iconSize / 8 + 2, yPos + iconSize - 3)
 		}
 	}
+}
+
+function drawLeftMoveArrow(ctx, posX, posY) {
+	let icon = "⬅️";
+	ctx.font = arrowSize + "px serif";
+	ctx.fillText(icon, posX, posY);
+}
+
+function drawDownMoveArrow(ctx, posX, posY) {
+	let icon = "⬇️";
+	ctx.font = arrowSize + "px serif";
+	ctx.fillText(icon, posX, posY);
+}
+
+function drawUpMoveArrow(ctx, posX, posY) {
+	let icon = "⬆️";
+	ctx.font = arrowSize + "px serif";
+	ctx.fillText(icon, posX, posY);
+}
+
+function drawRightMoveArrow(ctx, posX, posY) {
+	let icon = "➡️";
+	ctx.font = arrowSize + "px serif";
+	ctx.fillText(icon, posX, posY);
 }
 
