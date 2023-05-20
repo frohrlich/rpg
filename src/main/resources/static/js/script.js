@@ -372,8 +372,8 @@ function updateGameArea(timestamp) {
 function update(vueInfo) {
 
 	let testMap = [["Foret", "Foret", "Montagne"],
-	["Volcan", "Village", "Foret"],
-	["Plage", "Plage", "Plage"]];
+				   ["Volcan", "Village", "Foret"],
+				   ["Plage", "Plage", "Plage"]];
 
 	myMap.charPosX = testCharPosX;
 	myMap.charPosY = testCharPosY;
@@ -467,13 +467,22 @@ function update(vueInfo) {
 	myMainTextBox.text = vueInfo.texte;
 
 	if (vueInfo.options.length > 0) {
+		myOption1.hidden = false;
 		myOption1.text = vueInfo.options[0].texte;
+	} else {
+		myOption1.hidden = true;
 	}
 	if (vueInfo.options.length > 1) {
+		myOption2.hidden = false;
 		myOption2.text = vueInfo.options[1].texte;
+	} else {
+		myOption2.hidden = true;
 	}
 	if (vueInfo.options.length > 2) {
+		myOption3.hidden = false;
 		myOption3.text = vueInfo.options[2].texte;
+	} else {
+		myOption3.hidden = true;
 	}
 
 	previousVue = vueInfo;
