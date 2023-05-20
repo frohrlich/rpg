@@ -106,7 +106,7 @@ function startGame() {
 		"textBox",
 		""
 	);
-	
+
 	myBackground = new component(
 		canvasWidth,
 		canvasHeight,
@@ -114,6 +114,18 @@ function startGame() {
 		0,
 		0,
 		"background"
+	);
+	
+	myMap = new component(
+		0,
+		0,
+		"",
+		canvasWidth-185,
+		5,
+		"map",
+		"",
+		hidden=true,
+		mapInfo=[]
 	);
 
 	myGameArea.start();
@@ -137,9 +149,10 @@ let myGameArea = {
 };
 
 // any component of the game (sprite, dialog box...)
-function component(width, height, colorImage, x, y, type, text = null, hidden = false) {
+function component(width, height, colorImage, x, y, type, text = null, hidden = false, mapInfo=null) {
 	this.type = type;
 	this.hidden = hidden;
+	this.mapInfo = mapInfo;
 
 	if (type == "image" || type == "background") {
 		this.image = new Image();
@@ -175,6 +188,8 @@ function component(width, height, colorImage, x, y, type, text = null, hidden = 
 				ctx.fillText(this.text, this.x, this.y);
 			} else if (this.type == "textBox") {
 				drawTextBox(ctx, this.text, this.x, this.y, this.width, this.height, this.color);
+			} else if (this.type == "map") {
+				drawMap(ctx, this.x, this.y, this.mapInfo, 2, 1);
 			} else {
 				ctx.fillStyle = colorImage;
 				ctx.fillRect(this.x, this.y, this.width, this.height);
@@ -256,6 +271,7 @@ function updateGameArea(timestamp) {
 	myOption1.update();
 	myOption2.update();
 	myOption3.update();
+	myMap.update();
 	myCharacter.newPos();
 	myCharacter.update();
 	myCharacterInfo.update();
@@ -266,6 +282,13 @@ function updateGameArea(timestamp) {
 
 // updates view with response from server
 function update(vueInfo) {
+
+	let testMap = [["Foret", "Foret", "Montagne"],
+				   ["Volcan", "Village", "Foret"],
+				   ["Plage", "Plage", "Plage"]];
+
+	myMap.mapInfo = testMap;
+	myMap.hidden = false;
 
 	// if player present on current view we show its infobox
 	if (Object.hasOwn(vueInfo, 'joueur')) {
@@ -289,6 +312,7 @@ function update(vueInfo) {
 	// if pnj present on current view we show its infobox
 	if (Object.hasOwn(vueInfo, 'pnj')) {
 		myPnjInfo.hidden = false;
+		myMap.hidden = true; // hide map if pnj present
 		myPnjInfo.text = vueInfo.pnj.personnage.nom
 			+ "      niveau " + vueInfo.pnj.personnage.niveau
 			+ "     " + Math.max(vueInfo.pnj.personnage.pv, 0) + "/"
@@ -349,6 +373,8 @@ function drawTextBox(ctx, text, posX, posY, tailleX, tailleY, color) {
 		(fill = true)
 	);
 	ctx.fillStyle = "black";
+	ctx.strokeStyle = "black";
+	ctx.lineWidth = 1;
 	rectArrondi(ctx, posX, posY, tailleX, tailleY, 5);
 	ctx.font = textfontSize + "px serif";
 	let lines = getLines(ctx, text, tailleX);
@@ -400,5 +426,50 @@ function getLines(ctx, text, maxWidth) {
 	}
 	lines.push(currentLine);
 	return lines;
+}
+
+function drawMap(ctx, x, y, map, posX, posY) {
+	let boxSize = 60; // taille d'une case en pixels
+	let iconSize = boxSize - 10;
+	ctx.font = iconSize + "px serif";
+	let icon = "";
+	for (let i = 0; i < map.length; ++i) {
+		for (let j = 0; j < map[i].length; ++j) {
+			switch (map[i][j]) {
+				case "Foret":
+					ctx.fillStyle = "green";
+					icon = "🌲";
+					break;
+				case "Montagne":
+					ctx.fillStyle = "grey";
+					icon = "🗻";
+					break;
+				case "Volcan":
+					ctx.fillStyle = "red";
+					icon = "🌋";
+					break;
+				case "Plage":
+					ctx.fillStyle = "yellow";
+					icon = "🏖️";
+					break;
+				case "Village":
+					ctx.fillStyle = "purple";
+					icon = "🛖";
+					break;
+				default:
+			}
+			let xPos = x+boxSize*j;
+			let yPos = y+boxSize*i;
+			ctx.fillRect(xPos, yPos, boxSize, boxSize);
+			if(i == posY && j == posX) {
+				icon = "📍";
+				let width = 4;
+				ctx.strokeStyle = "Fuchsia";
+				ctx.lineWidth = width;
+				ctx.strokeRect(xPos + width/2, yPos + width/2, boxSize - width, boxSize - width);
+			}
+			ctx.fillText(icon, xPos - iconSize/8 + 2, yPos + iconSize - 3)
+		}
+	}
 }
 
