@@ -59,6 +59,12 @@ public class Personnage {
 	@Column(nullable = false)
 	private String apparence;
 	
+	@Column(nullable = false)
+	private String positionX;
+	
+	@Column(nullable = false)
+	private String poxitionY;
+	
 //	@JsonIgnore
 //	@OneToOne(mappedBy = "personnage")
 //    private Pnj pnj;
