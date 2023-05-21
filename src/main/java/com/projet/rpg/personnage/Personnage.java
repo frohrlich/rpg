@@ -60,10 +60,10 @@ public class Personnage {
 	private String apparence;
 	
 	@Column(nullable = false)
-	private String positionX;
+	private int positionX;
 	
 	@Column(nullable = false)
-	private String poxitionY;
+	private int poxitionY;
 	
 //	@JsonIgnore
 //	@OneToOne(mappedBy = "personnage")
