@@ -1,5 +1,9 @@
 package com.projet.rpg.game;
 
+/*
+ * C'est là-dedans que sont réunis les ingrédients qui composent le moteur du jeu.
+ */
+
 import java.util.List;
 
 import org.springframework.stereotype.Component;
