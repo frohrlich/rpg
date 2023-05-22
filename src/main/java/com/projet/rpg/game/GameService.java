@@ -10,7 +10,9 @@ import com.projet.rpg.evenement.Evenement;
 import com.projet.rpg.evenement.EvenementCombat;
 import com.projet.rpg.evenement.EvenementDialogue;
 import com.projet.rpg.evenement.EvenementService;
+import com.projet.rpg.lieux.Carte;
 import com.projet.rpg.personnage.Personnage;
+import com.projet.rpg.personnage.PersonnageService;
 import com.projet.rpg.personnage.Role;
 import com.projet.rpg.personnage.Sexe;
 import com.projet.rpg.personnage.joueur.Joueur;
@@ -19,6 +21,7 @@ import com.projet.rpg.personnage.pnj.Pnj;
 import com.projet.rpg.personnage.pnj.PnjService;
 import com.projet.rpg.vue.Option;
 import com.projet.rpg.vue.Vue;
+import com.projet.rpg.vue.VueDeplacement;
 import com.projet.rpg.vue.VueService;
 
 @Service
@@ -30,6 +33,17 @@ public class GameService {
 	private PnjService pnjService;
 	private EvenementService evenementService;
 	private VueService vueService;
+	
+
+	// A revoir ultérieurement
+	
+	private String [][] maCarte = new String[][] {{"Foret", "Foret", "Montagne"},
+		{"Volcan", "Village", "Foret"},
+		{"Plage", "Plage", "Plage"}};
+	
+	private Carte carte = new Carte(maCarte);
+	
+	//
 
 	public GameService(Game game, JoueurService joueurService, PnjService pnjService,
 			EvenementService evenementService, VueService vueService) {
@@ -107,6 +121,15 @@ public class GameService {
 		// parse JSON received from client
 		JSONObject obj = new JSONObject(message);
 		String strClick = obj.getString("click");
+		
+		Joueur joueur = game.getCurrentJoueur();
+		Pnj pnj = new Pnj();
+		
+		int currentX = joueur.getPersonnage().getPositionX();
+		int currentY = joueur.getPersonnage().getPositionY();
+		
+		int newX;
+		int newY;
 
 		// then act depending on option clicked
 		switch (strClick) {
@@ -122,8 +145,53 @@ public class GameService {
 				game.setCurrentVue(nouvelleVue);
 			}
 			break;
+		case "flecheN": // si on n'est ni dans un combat, ni dans un dialogue etc... On est en déplacement
+			newX = currentX;
+			newY = currentY - 1;
+			
+			joueur.getPersonnage().setPositionX(newX);
+			joueur.getPersonnage().setPositionY(newY);
+			
+			nouvelleVue = getVueDeplacementAvecOuSansPnj(joueur, newX, newY);
+			game.setCurrentVue(nouvelleVue);
+			
+			break;
+		case "flecheS":
+			newX = currentX;
+			newY = currentY + 1;
+			
+			joueur.getPersonnage().setPositionX(newX);
+			joueur.getPersonnage().setPositionY(newY);
+			
+			nouvelleVue = getVueDeplacementAvecOuSansPnj(joueur, newX, newY);
+			game.setCurrentVue(nouvelleVue);
+			
+			break;
+		case "flecheO":
+			newX = currentX - 1;
+			newY = currentY;
+			
+			joueur.getPersonnage().setPositionX(newX);
+			joueur.getPersonnage().setPositionY(newY);
+			
+			nouvelleVue = getVueDeplacementAvecOuSansPnj(joueur, newX, newY);
+			game.setCurrentVue(nouvelleVue);
+			
+			break;
+		case "flecheE":
+			newX = currentX + 1;
+			newY = currentY;
+			
+			joueur.getPersonnage().setPositionX(newX);
+			joueur.getPersonnage().setPositionY(newY);
+			
+			nouvelleVue = getVueDeplacementAvecOuSansPnj(joueur, newX, newY);
+			game.setCurrentVue(nouvelleVue);
+			
+			break;
 		default:
 		}
+	
 
 		// returns current vue info
 		return game.getCurrentVue();
@@ -185,6 +253,55 @@ public class GameService {
 
 		return meeting;
 	}
-
+	
+	/**
+	 * Méthode pour récupérer le chemin d'accès à l'image d'un background pour le jeu
+	 * @param newStringLieu
+	 * @return
+	 */
+	public String getNewBackground(String newStringLieu) {
+		String newBackground = "";
+		switch (newStringLieu) {
+		case "Foret":
+			newBackground = "img/bg_foret.png";
+			break;
+		case "Montagne":
+			newBackground = "img/bg_montagne.png";
+			break;
+		case "Volcan":
+			newBackground = "img/bg_volcan.png";
+			break;
+		case "Village":
+			newBackground = "img/bg_village.png";
+			break;
+		case "Plage":
+			newBackground = "img/bg_plage.png";
+			break;
+		}
+		return newBackground;
+	}
+	
+	/**
+	 * Méthode pour récupérer le Pnj présent (ou non) à un lieu donné
+	 * @param positionX
+	 * @param positionY
+	 * @return
+	 */
+	public Vue getVueDeplacementAvecOuSansPnj(Joueur joueur, int positionX, int positionY){
+		Pnj pnjPresent = pnjService.findByLieu(positionX, positionY);
+		
+		String newStringLieu = carte.getMaCarte()[positionX][positionY];
+		String newBackground = getNewBackground(newStringLieu);
+		
+		String welcomeNewLieu = "";
+		
+		if (pnjPresent != null) {
+			Vue nouvelleVue = new VueDeplacement(newBackground, welcomeNewLieu, joueur, pnjPresent, carte);
+			return nouvelleVue;
+		} else {
+			Vue nouvelleVue = new VueDeplacement(newBackground, welcomeNewLieu, joueur, carte);
+			return nouvelleVue;
+		}
+	}
 	
 }
