@@ -1,5 +1,10 @@
 package com.projet.rpg.evenement;
 
+/**
+ * Classe fille de 'Evenement' : on y ajouter un Pnj.
+ * Classe mère de 'EvenementCombat, 'EvenementDialogue'...
+ */
+
 import org.springframework.stereotype.Component;
 
 import com.projet.rpg.personnage.joueur.Joueur;

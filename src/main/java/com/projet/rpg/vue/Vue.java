@@ -1,5 +1,9 @@
 package com.projet.rpg.vue;
 
+/**
+ * Classe mère de 'VueAvecPnj'.
+ */
+
 import java.util.ArrayList;
 import java.util.List;
 

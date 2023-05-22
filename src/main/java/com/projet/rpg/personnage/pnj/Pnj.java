@@ -1,5 +1,9 @@
 package com.projet.rpg.personnage.pnj;
 
+/**
+ * "Fausse" classe fille de 'Personnage'
+ */
+
 import com.projet.rpg.personnage.Personnage;
 
 import jakarta.persistence.CascadeType;

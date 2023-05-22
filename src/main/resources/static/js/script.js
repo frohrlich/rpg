@@ -2,6 +2,8 @@
  * Canvas game script
  */
 
+// ______Définition de la "boîte" dans laquelle le jeu est affiché______
+
 let testCharPosX = 0;
 let testCharPosY = 0;
 
@@ -18,10 +20,14 @@ let previousVue = null;
 
 let interfacePosY = 300; // y position of interface
 
-let charStartPosX = 130; // starting x position for character
-let charStartPosY = 130; // starting y position for character
-let pnjStartPosX = canvasWidth - 140; // starting x position for pnj
-let pnjStartPosY = 130; // starting y position for pnj
+// Position de départ du joueur
+let charStartPosX = 130; // selon l'axe x
+let charStartPosY = 130; // selon l'axe y
+
+// Position de départ du pnj
+let pnjStartPosX = canvasWidth - 140; // selon l'axe x
+let pnjStartPosY = 130; // selon l'axe y
+
 let limitMovementX = 10; // moving space for character animation
 let directionChar = 1,
 	directionPnj = -1; // starting moving direction 1 right, -1 left

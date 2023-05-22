@@ -23,16 +23,33 @@ public class EvenementCombatService {
 		this.vueAvecPnjService = vueAvecPnjService;
 		this.personnageService = personnageService;
 	}
-
-	public void update(EvenementCombat evenementCombat) {
-		this.evenementCombat = evenementCombat;
+	
+	/**
+	 * Mise à jour de l'événement
+	 * @param evenement
+	 */
+	public void update(Evenement evenement) {
+		this.evenementCombat = (EvenementCombat) evenement;
 	}
-
+	
+	/**
+	 * Génération de la prochaine vue de l'événénement combat
+	 * @return
+	 */
 	public Vue nextVue() {
 		Pnj pnj = evenementCombat.getPnj();
 		Joueur joueur = evenementCombat.getJoueur();
+		
+		/* Avanat que le combat ne commence, vérification qu'aucun des personnages ne soit déjà mort,
+		 * sinon, le combat est immédiatement terminé
+		*/
+		if (personnageService.isDead(pnj.getPersonnage()) || personnageService.isDead(joueur.getPersonnage())) {
+			return null;
+		}
+		
+		VueAvecPnj myVue = null;
 
-		// if fight just started : return welcome view
+		// Si le combat vient de commencer, affichage d'un texte "d'introduction"
 		if (evenementCombat.etape == 0) {
 			String welcomeMessage = "Le combat contre " + pnj.getPersonnage().getNom() + " commence !";
 			VueAvecPnj welcomeVue = new VueAvecPnj(evenementCombat.getBackground(), welcomeMessage, joueur, pnj);
@@ -42,35 +59,28 @@ public class EvenementCombatService {
 			return welcomeVue;
 		}
 
-		// at the beginning, check if someone is already dead.
-		// if so, end the event immediately
-		if (personnageService.isDead(pnj.getPersonnage()) || personnageService.isDead(joueur.getPersonnage())) {
-			return null;
-		}
-
-		VueAvecPnj myVue = null;
-
+		// Création des variables locales pour le combat
 		int infligeDegatJoueur;
 		String texteDegatJoueur;
 		int infligeDegatPnj;
 		String texteDegatPnj;
 
-		// check if player hit
+		// Si le personnage atteint le Pnj cible
 		if (personnageService.reussitAttaque(joueur.getPersonnage(), pnj.getPersonnage())) {
-			// calculates damage inflicted to pnj
-			infligeDegatJoueur = personnageService.infligeDegat(joueur.getPersonnage(), pnj.getPersonnage());
-			// inflicts damage to the pnj
+			// Calcul des dégâts infligeables à la cible
+			infligeDegatJoueur = personnageService.calculDegats(joueur.getPersonnage(), pnj.getPersonnage());
+			// Application des dégâts à la cible
 			personnageService.blesse(pnj.getPersonnage(), infligeDegatJoueur);
-			// sets text corresponding to the action
+			// Préparation du texte correspondant à l'action
 			texteDegatJoueur = joueur.getPersonnage().getNom() + " a infligé " + infligeDegatJoueur
 					+ " points de dégâts.";
-		} else {
+		} else { // Sinon préparation du texte d'échec de l'attaque
 			texteDegatJoueur = joueur.getPersonnage().getNom() + " a manqué sa cible !";
 		}
 
-		// same for pnj hitting player
+		// Idem, mais dans le cas où le Pnj attaque le Personnage
 		if (personnageService.reussitAttaque(pnj.getPersonnage(), joueur.getPersonnage())) {
-			infligeDegatPnj = personnageService.infligeDegat(pnj.getPersonnage(), joueur.getPersonnage());
+			infligeDegatPnj = personnageService.calculDegats(pnj.getPersonnage(), joueur.getPersonnage());
 			personnageService.blesse(joueur.getPersonnage(), infligeDegatPnj);
 			texteDegatPnj = pnj.getPersonnage().getNom() + " a infligé " + infligeDegatPnj + " points de dégâts.";
 		} else {
@@ -79,13 +89,13 @@ public class EvenementCombatService {
 
 		String currentTexte;
 
-		// check if pnj is dead
+		// Vérification que le Pnj n'est pas mort
 		if (personnageService.isDead(pnj.getPersonnage())) {
 			currentTexte = "Vous avez gagné le combat !";
-			// then check if player is dead. If both die at same turn, player wins :-)
+			// Puis, vérification que le Joueur n'est pas mort. Si le Joueur et le Pnj meurent au même tour, alors le Joueur gagne.
 		} else if (personnageService.isDead(joueur.getPersonnage())) {
 			currentTexte = "Game Over";
-			// else display normal message
+			// Sinon, affichage des dégâts infligés
 		} else {
 			currentTexte = texteDegatJoueur + " " + texteDegatPnj;
 		}
@@ -96,10 +106,6 @@ public class EvenementCombatService {
 		vueAvecPnjService.addOption(new Option("Attaquer"));
 
 		return myVue;
-	}
-	
-	public void update(Evenement evenement) {
-		this.evenementCombat = (EvenementCombat) evenement;
 	}
 
 }
