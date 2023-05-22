@@ -4,8 +4,8 @@
 
 // ______Définition de la "boîte" dans laquelle le jeu est affiché______
 
-let testCharPosX = 0;
-let testCharPosY = 0;
+// let testCharPosX = 0;
+// let testCharPosY = 0;
 
 // move arrows size
 let arrowSize = 60;
@@ -381,8 +381,9 @@ function update(vueInfo) {
 				   ["Volcan", "Village", "Foret"],
 				   ["Plage", "Plage", "Plage"]];
 
-	myMap.charPosX = testCharPosX;
-	myMap.charPosY = testCharPosY;
+	myMap.charPosX = vueInfo.joueur.personnage.positionX;
+	console.log("blabla");
+	myMap.charPosY = vueInfo.joueur.personnage.positionY;
 
 	// if not already at left border of the map
 	if (myMap.charPosX != 0) {

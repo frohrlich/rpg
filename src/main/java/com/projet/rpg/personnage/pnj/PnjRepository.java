@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface PnjRepository extends JpaRepository<Pnj, Integer> {
 	
-	@Query("SELECT * FROM pnj pn INNER JOIN personnage pe ON pn.id = pe.id WHERE (pe.positionx = ?1 AND pe.positiony = ?2)")
+	@Query(value="SELECT * FROM pnj pn INNER JOIN personnage pe ON pn.personnage_id = pe.id WHERE pe.positionx = ?1 AND pe.positiony = ?2", nativeQuery = true)
 	Pnj findByLieu(int positionX, int positionY);
 	
 }

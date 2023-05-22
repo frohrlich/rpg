@@ -12,7 +12,6 @@ import com.projet.rpg.evenement.EvenementDialogue;
 import com.projet.rpg.evenement.EvenementService;
 import com.projet.rpg.lieux.Carte;
 import com.projet.rpg.personnage.Personnage;
-import com.projet.rpg.personnage.PersonnageService;
 import com.projet.rpg.personnage.Role;
 import com.projet.rpg.personnage.Sexe;
 import com.projet.rpg.personnage.joueur.Joueur;
@@ -123,7 +122,6 @@ public class GameService {
 		String strClick = obj.getString("click");
 		
 		Joueur joueur = game.getCurrentJoueur();
-		Pnj pnj = new Pnj();
 		
 		int currentX = joueur.getPersonnage().getPositionX();
 		int currentY = joueur.getPersonnage().getPositionY();
