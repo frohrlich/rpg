@@ -36,12 +36,7 @@ public class GameService {
 	
 
 	// A revoir ultérieurement
-	
-	private String [][] maCarte = new String[][] {{"Foret", "Foret", "Montagne"},
-		{"Volcan", "Village", "Foret"},
-		{"Plage", "Plage", "Plage"}};
-	
-	private Carte carte = new Carte(maCarte);
+	private Carte carte;
 	
 	//
 
@@ -70,6 +65,13 @@ public class GameService {
 	 * Initialisation du jeu.
 	 */
 	public Vue initialize() {
+		
+		String [][] maCarte = new String[][] {{"Foret", "Foret", "Montagne"},
+											  {"Volcan", "Village", "Foret"},
+											  {"Plage", "Plage", "Plage"}};
+		
+		carte = new Carte(maCarte);
+		
 		game.setEtape(0);
 		
 		// On supprime tous les joueurs et tous les pnjs, il ne faudra plus faire ça à terme .
@@ -77,9 +79,9 @@ public class GameService {
 		pnjService.deleteAll();
 
 		// Création des personnages à la main pour tester.
-		Personnage perJ = new Personnage(1, "Martin", Sexe.M, Role.Ep, 1, 100, 100, 12, 5, 5, 10, "img/epeisteM.png", 2, 1);
+		Personnage perJ = new Personnage(1, "Martin", Sexe.M, Role.Ep, 1, 100, 100, 12, 5, 5, 10, "img/epeisteM.png", 1, 1);
 		Joueur martin = new Joueur(1, 1000, perJ);
-		Personnage perP = new Personnage(2, "Paysanne", Sexe.F, Role.Ep, 1, 100, 100, 10, 5, 5, 10, "img/paysanne.png", 1, 1);
+		Personnage perP = new Personnage(2, "Paysanne", Sexe.F, Role.Ep, 1, 100, 100, 10, 5, 5, 10, "img/paysanne.png", 1, 2);
 		Pnj pnj = new Pnj(1, "", true, perP);
 
 		joueurService.save(martin);
@@ -266,7 +268,7 @@ public class GameService {
 		
 		Pnj pnjPresent = pnjService.findByLieu(positionX, positionY);
 		
-		String newStringLieu = carte.getMaCarte()[positionX][positionY];
+		String newStringLieu = carte.getMaCarte()[positionY][positionX];
 		
 		Lieu newLieu = new Lieu(newStringLieu);
 		

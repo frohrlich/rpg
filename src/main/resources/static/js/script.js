@@ -337,19 +337,15 @@ function updateGameArea(timestamp) {
 			sendClick("option3");
 		}
 		else if (myLeftMoveArrow.clicked()) {
-			testCharPosX--;
 			sendClick("flecheO");
 		}
 		else if (myRightMoveArrow.clicked()) {
-			testCharPosX++;
 			sendClick("flecheE");
 		}
 		else if (myUpMoveArrow.clicked()) {
-			testCharPosY--;
 			sendClick("flecheN");
 		}
 		else if (myDownMoveArrow.clicked()) {
-			testCharPosY++;
 			sendClick("flecheS");
 		}
 		myGameArea.x = 0; // reset click position
