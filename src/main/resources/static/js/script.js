@@ -4,9 +4,15 @@
 
 // ______Définition de la "boîte" dans laquelle le jeu est affiché______
 
-let canvasWidth = 600; // largeur
-let canvasHeight = 400; // hauteur
-let textfontSize = 20; // taille de la police de caractères pour les dialogues et options
+let testCharPosX = 0;
+let testCharPosY = 0;
+
+// move arrows size
+let arrowSize = 60;
+
+let canvasWidth = 600;
+let canvasHeight = 400;
+let textfontSize = 20; // font size for main text box and options
 
 let start, previousTimeStamp, lastFrameTimeStamp;
 
@@ -112,7 +118,7 @@ function startGame() {
 		"textBox",
 		""
 	);
-	
+
 	myBackground = new component(
 		canvasWidth,
 		canvasHeight,
@@ -120,6 +126,62 @@ function startGame() {
 		0,
 		0,
 		"background"
+	);
+
+	myMap = new component(
+		0,
+		0,
+		"",
+		canvasWidth - 185,
+		5,
+		"map",
+		"",
+		hidden = true,
+		mapInfo = []
+	);
+
+	myLeftMoveArrow = new component(
+		0,
+		0,
+		"img/left-arrow.png",
+		0,
+		canvasHeight / 2,
+		"image",
+		"",
+		hidden = true
+	);
+
+	myDownMoveArrow = new component(
+		0,
+		0,
+		"img/down-arrow.png",
+		canvasWidth / 2 - arrowSize / 2,
+		interfacePosY-50,
+		"image",
+		"",
+		hidden = true
+	);
+
+	myUpMoveArrow = new component(
+		0,
+		0,
+		"img/up-arrow.png",
+		canvasWidth / 2 - arrowSize / 2,
+		0,
+		"image",
+		"",
+		hidden = true
+	);
+
+	myRightMoveArrow = new component(
+		0,
+		0,
+		"img/right-arrow.png",
+		canvasWidth - arrowSize,
+		canvasHeight / 2,
+		"image",
+		"",
+		hidden = true
 	);
 
 	myGameArea.start();
@@ -143,9 +205,15 @@ let myGameArea = {
 };
 
 // any component of the game (sprite, dialog box...)
-function component(width, height, colorImage, x, y, type, text = null, hidden = false) {
+function component(width, height, colorImage, x, y, type, text = null, hidden = false, mapInfo = null, charPosX = 0, charPosY = 0) {
+
+	// positions of character on game map
+	this.charPosX = charPosX;
+	this.charPosY = charPosY;
+
 	this.type = type;
 	this.hidden = hidden;
+	this.mapInfo = mapInfo;
 
 	if (type == "image" || type == "background") {
 		this.image = new Image();
@@ -181,6 +249,16 @@ function component(width, height, colorImage, x, y, type, text = null, hidden = 
 				ctx.fillText(this.text, this.x, this.y);
 			} else if (this.type == "textBox") {
 				drawTextBox(ctx, this.text, this.x, this.y, this.width, this.height, this.color);
+			} else if (this.type == "map") {
+				drawMap(ctx, this.x, this.y, this.mapInfo, this.charPosX, this.charPosY);
+			} else if (this.type == "leftMoveArrow") {
+				drawLeftMoveArrow(ctx, this.x, this.y);
+			} else if (this.type == "downMoveArrow") {
+				drawDownMoveArrow(ctx, this.x, this.y);
+			} else if (this.type == "upMoveArrow") {
+				drawUpMoveArrow(ctx, this.x, this.y);
+			} else if (this.type == "rightMoveArrow") {
+				drawRightMoveArrow(ctx, this.x, this.y);
 			} else {
 				ctx.fillStyle = colorImage;
 				ctx.fillRect(this.x, this.y, this.width, this.height);
@@ -188,6 +266,11 @@ function component(width, height, colorImage, x, y, type, text = null, hidden = 
 		}
 	};
 	this.clicked = function() {
+		// first check if hidden
+		// if so, can't be clicked
+		if(this.hidden) {
+			return false;
+		}
 		var myleft = this.x;
 		var myright = this.x + (this.width);
 		var mytop = this.y;
@@ -253,6 +336,22 @@ function updateGameArea(timestamp) {
 		else if (myOption3.clicked()) {
 			sendClick("option3");
 		}
+		else if (myLeftMoveArrow.clicked()) {
+			testCharPosX--;
+			sendClick("flecheO");
+		}
+		else if (myRightMoveArrow.clicked()) {
+			testCharPosX++;
+			sendClick("flecheE");
+		}
+		else if (myUpMoveArrow.clicked()) {
+			testCharPosY--;
+			sendClick("flecheN");
+		}
+		else if (myDownMoveArrow.clicked()) {
+			testCharPosY++;
+			sendClick("flecheS");
+		}
 		myGameArea.x = 0; // reset click position
 		myGameArea.y = 0;
 	}
@@ -262,6 +361,11 @@ function updateGameArea(timestamp) {
 	myOption1.update();
 	myOption2.update();
 	myOption3.update();
+	myMap.update();
+	myLeftMoveArrow.update();
+	myDownMoveArrow.update();
+	myUpMoveArrow.update();
+	myRightMoveArrow.update();
 	myCharacter.newPos();
 	myCharacter.update();
 	myCharacterInfo.update();
@@ -272,6 +376,40 @@ function updateGameArea(timestamp) {
 
 // updates view with response from server
 function update(vueInfo) {
+
+	let testMap = [["Foret", "Foret", "Montagne"],
+				   ["Volcan", "Village", "Foret"],
+				   ["Plage", "Plage", "Plage"]];
+
+	myMap.charPosX = testCharPosX;
+	myMap.charPosY = testCharPosY;
+
+	// if not already at left border of the map
+	if (myMap.charPosX != 0) {
+		// then show left move arrow
+		myLeftMoveArrow.hidden = false;
+	} else {
+		myLeftMoveArrow.hidden = true;
+	}
+	// same for right side of the map
+	if (myMap.charPosX != testMap.length - 1) {
+		myRightMoveArrow.hidden = false;
+	} else {
+		myRightMoveArrow.hidden = true;
+	}
+	if (myMap.charPosY != 0) {
+		myUpMoveArrow.hidden = false;
+	} else {
+		myUpMoveArrow.hidden = true;
+	}
+	if (myMap.charPosY != testMap[0].length - 1) {
+		myDownMoveArrow.hidden = false;
+	} else {
+		myDownMoveArrow.hidden = true;
+	}
+
+	myMap.mapInfo = testMap;
+	myMap.hidden = false;
 
 	// if player present on current view we show its infobox
 	if (Object.hasOwn(vueInfo, 'joueur')) {
@@ -295,6 +433,11 @@ function update(vueInfo) {
 	// if pnj present on current view we show its infobox
 	if (Object.hasOwn(vueInfo, 'pnj')) {
 		myPnjInfo.hidden = false;
+		myLeftMoveArrow.hidden = true;
+		myDownMoveArrow.hidden = true;
+		myUpMoveArrow.hidden = true;
+		myRightMoveArrow.hidden = true;
+		myMap.hidden = true; // hide map if pnj present
 		myPnjInfo.text = vueInfo.pnj.personnage.nom
 			+ "      niveau " + vueInfo.pnj.personnage.niveau
 			+ "     " + Math.max(vueInfo.pnj.personnage.pv, 0) + "/"
@@ -330,13 +473,22 @@ function update(vueInfo) {
 	myMainTextBox.text = vueInfo.texte;
 
 	if (vueInfo.options.length > 0) {
+		myOption1.hidden = false;
 		myOption1.text = vueInfo.options[0].texte;
+	} else {
+		myOption1.hidden = true;
 	}
 	if (vueInfo.options.length > 1) {
+		myOption2.hidden = false;
 		myOption2.text = vueInfo.options[1].texte;
+	} else {
+		myOption2.hidden = true;
 	}
 	if (vueInfo.options.length > 2) {
+		myOption3.hidden = false;
 		myOption3.text = vueInfo.options[2].texte;
+	} else {
+		myOption3.hidden = true;
 	}
 
 	previousVue = vueInfo;
@@ -355,6 +507,8 @@ function drawTextBox(ctx, text, posX, posY, tailleX, tailleY, color) {
 		(fill = true)
 	);
 	ctx.fillStyle = "black";
+	ctx.strokeStyle = "black";
+	ctx.lineWidth = 1;
 	rectArrondi(ctx, posX, posY, tailleX, tailleY, 5);
 	ctx.font = textfontSize + "px serif";
 	let lines = getLines(ctx, text, tailleX);
@@ -406,5 +560,74 @@ function getLines(ctx, text, maxWidth) {
 	}
 	lines.push(currentLine);
 	return lines;
+}
+
+function drawMap(ctx, x, y, map, posX, posY) {
+	let boxSize = 60; // taille d'une case en pixels
+	let iconSize = boxSize - 10;
+	ctx.font = iconSize + "px serif";
+	let icon = "";
+	for (let i = 0; i < map.length; ++i) {
+		for (let j = 0; j < map[i].length; ++j) {
+			switch (map[i][j]) {
+				case "Foret":
+					ctx.fillStyle = "green";
+					icon = "🌲";
+					break;
+				case "Montagne":
+					ctx.fillStyle = "grey";
+					icon = "🗻";
+					break;
+				case "Volcan":
+					ctx.fillStyle = "DarkRed";
+					icon = "🌋";
+					break;
+				case "Plage":
+					ctx.fillStyle = "yellow";
+					icon = "🏖️";
+					break;
+				case "Village":
+					ctx.fillStyle = "purple";
+					icon = "🛖";
+					break;
+				default:
+			}
+			let xPos = x + boxSize * j;
+			let yPos = y + boxSize * i;
+			ctx.fillRect(xPos, yPos, boxSize, boxSize);
+			if (i == posY && j == posX) {
+				icon = "📍";
+				let width = 4;
+				ctx.strokeStyle = "Fuchsia";
+				ctx.lineWidth = width;
+				ctx.strokeRect(xPos + width / 2, yPos + width / 2, boxSize - width, boxSize - width);
+			}
+			ctx.fillText(icon, xPos - iconSize / 8 + 2, yPos + iconSize - 3)
+		}
+	}
+}
+
+function drawLeftMoveArrow(ctx, posX, posY) {
+	let icon = "⬅️";
+	ctx.font = arrowSize + "px serif";
+	ctx.fillText(icon, posX, posY);
+}
+
+function drawDownMoveArrow(ctx, posX, posY) {
+	let icon = "⬇️";
+	ctx.font = arrowSize + "px serif";
+	ctx.fillText(icon, posX, posY);
+}
+
+function drawUpMoveArrow(ctx, posX, posY) {
+	let icon = "⬆️";
+	ctx.font = arrowSize + "px serif";
+	ctx.fillText(icon, posX, posY);
+}
+
+function drawRightMoveArrow(ctx, posX, posY) {
+	let icon = "➡️";
+	ctx.font = arrowSize + "px serif";
+	ctx.fillText(icon, posX, posY);
 }
 

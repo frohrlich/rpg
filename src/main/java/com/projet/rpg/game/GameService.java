@@ -145,6 +145,7 @@ public class GameService {
 				game.setCurrentVue(nouvelleVue);
 			}
 			break;
+
 		case "flecheN": // si on n'est ni dans un combat, ni dans un dialogue etc... On est en déplacement
 			newX = currentX;
 			newY = currentY - 1;
@@ -187,7 +188,7 @@ public class GameService {
 			
 			nouvelleVue = getVueDeplacementAvecOuSansPnj(joueur, newX, newY);
 			game.setCurrentVue(nouvelleVue);
-			
+
 			break;
 		default:
 		}
