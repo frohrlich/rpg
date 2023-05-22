@@ -2,7 +2,8 @@ package com.projet.rpg.personnage;
 
 public enum Sexe  {
 	M("Masculin"),
-	F("Féminin");
+	F("Féminin"),
+	A("Autre");
 	
 	private String sexe;
 	

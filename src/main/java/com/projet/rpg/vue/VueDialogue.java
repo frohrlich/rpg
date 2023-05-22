@@ -1,5 +1,9 @@
 package com.projet.rpg.vue;
 
+/**
+ * Classe fille de 'VueAvecPnj'.
+ */
+
 import org.springframework.stereotype.Component;
 
 import com.projet.rpg.personnage.joueur.Joueur;

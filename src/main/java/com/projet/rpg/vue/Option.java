@@ -1,5 +1,9 @@
 package com.projet.rpg.vue;
 
+/**
+ * Une option contient une chaîne de caractère composée de différentes possibilités.
+ */
+
 import org.springframework.stereotype.Component;
 
 import lombok.AllArgsConstructor;

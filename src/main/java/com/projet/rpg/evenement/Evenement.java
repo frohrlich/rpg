@@ -1,5 +1,9 @@
 package com.projet.rpg.evenement;
 
+/**
+ * Classe mère de 'EvenementAvecPnj'.
+ */
+
 import org.springframework.stereotype.Component;
 
 import com.projet.rpg.personnage.joueur.Joueur;

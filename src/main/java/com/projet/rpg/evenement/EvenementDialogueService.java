@@ -20,13 +20,25 @@ public class EvenementDialogueService {
 		this.evenementDialogue = evenementDialogue;
 		this.vueAvecPnjService = vueAvecPnjService;
 	}
+	
+	/**
+	 * Mise à jour de l'événement dialogue.
+	 * @param evenementCombat
+	 */
+	public void update(Evenement evenement) {
+		this.evenementDialogue = (EvenementDialogue) evenement;
+	}
 
+	/**
+	 * Génération de la prochaine vue de l'événénement dialogue.
+	 * @return
+	 */
 	public Vue nextVue() {
 
 		Pnj pnj = evenementDialogue.getPnj();
 		Joueur joueur = evenementDialogue.getJoueur();
 		
-		// if dialogue just started : return welcome view
+		// Si le dialogue vient de commencer, affichage d'un dialogue "d'introduction".
 		if (evenementDialogue.etape == 0) {
 			String welcomeMessage = pnj.getPersonnage().getNom() + " se trouve sur votre chemin.";
 			VueAvecPnj welcomeVue = new VueAvecPnj(evenementDialogue.getBackground(), welcomeMessage, joueur, pnj);
@@ -39,7 +51,8 @@ public class EvenementDialogueService {
 		JSONObject obj = new JSONObject(pnj.getDialogue());
 		String textFieldName = "texte" + evenementDialogue.getEtape();
 		VueAvecPnj myVue = null;
-
+		
+		// Autrement, poursuite du dialogue avec pour unique possibilité de continuer.
 		if (!obj.isNull(textFieldName)) {
 			String currentTexte = pnj.getPersonnage().getNom() 
 								+ " : " + obj.getString(textFieldName);
@@ -52,9 +65,5 @@ public class EvenementDialogueService {
 
 		return myVue;
 	}
-
-	public void update(Evenement evenement) {
-		this.evenementDialogue = (EvenementDialogue) evenement;
-	}
-
+	
 }

@@ -1,5 +1,10 @@
 package com.projet.rpg.vue;
 
+/**
+ * Classe fille de 'Vue'
+ * Classe mère de 'VueDialogue'.
+ */
+
 import org.springframework.stereotype.Component;
 
 import com.projet.rpg.personnage.joueur.Joueur;

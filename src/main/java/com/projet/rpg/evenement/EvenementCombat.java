@@ -1,5 +1,10 @@
 package com.projet.rpg.evenement;
 
+/**
+ * Classe fille de 'EvenementAvecPnj'.
+ * N'ajoute rien donc potentiellement à supprimer...
+ */
+
 import org.springframework.stereotype.Component;
 
 import com.projet.rpg.personnage.joueur.Joueur;
