@@ -109,6 +109,12 @@ public class GameService {
 				game.setCurrentVue(nouvelleVue);
 			}
 			break;
+		case "flecheE":
+		case "flecheO":
+		case "flecheN":
+		case "flecheS":
+			game.setCurrentVue(welcomeVue());
+			break;
 		default:
 		}
 
