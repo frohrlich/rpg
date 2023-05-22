@@ -2,9 +2,11 @@
  * Canvas game script
  */
 
-let canvasWidth = 600;
-let canvasHeight = 400;
-let textfontSize = 20; // font size for main text box and options
+// ______Définition de la "boîte" dans laquelle le jeu est affiché______
+
+let canvasWidth = 600; // largeur
+let canvasHeight = 400; // hauteur
+let textfontSize = 20; // taille de la police de caractères pour les dialogues et options
 
 let start, previousTimeStamp, lastFrameTimeStamp;
 
@@ -12,10 +14,14 @@ let previousVue = null;
 
 let interfacePosY = 300; // y position of interface
 
-let charStartPosX = 130; // starting x position for character
-let charStartPosY = 130; // starting y position for character
-let pnjStartPosX = canvasWidth - 140; // starting x position for pnj
-let pnjStartPosY = 130; // starting y position for pnj
+// Position de départ du joueur
+let charStartPosX = 130; // selon l'axe x
+let charStartPosY = 130; // selon l'axe y
+
+// Position de départ du pnj
+let pnjStartPosX = canvasWidth - 140; // selon l'axe x
+let pnjStartPosY = 130; // selon l'axe y
+
 let limitMovementX = 10; // moving space for character animation
 let directionChar = 1,
 	directionPnj = -1; // starting moving direction 1 right, -1 left
