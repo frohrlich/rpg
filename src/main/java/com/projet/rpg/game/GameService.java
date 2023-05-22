@@ -10,7 +10,8 @@ import com.projet.rpg.evenement.Evenement;
 import com.projet.rpg.evenement.EvenementCombat;
 import com.projet.rpg.evenement.EvenementDialogue;
 import com.projet.rpg.evenement.EvenementService;
-import com.projet.rpg.lieux.Carte;
+import com.projet.rpg.lieu.Carte;
+import com.projet.rpg.lieu.Lieu;
 import com.projet.rpg.personnage.Personnage;
 import com.projet.rpg.personnage.Role;
 import com.projet.rpg.personnage.Sexe;
@@ -76,7 +77,7 @@ public class GameService {
 		pnjService.deleteAll();
 
 		// Création des personnages à la main pour tester.
-		Personnage perJ = new Personnage(1, "Martin", Sexe.M, Role.Ep, 1, 100, 100, 12, 5, 5, 10, "img/epeisteM.png", 1, 1);
+		Personnage perJ = new Personnage(1, "Martin", Sexe.M, Role.Ep, 1, 100, 100, 12, 5, 5, 10, "img/epeisteM.png", 2, 1);
 		Joueur martin = new Joueur(1, 1000, perJ);
 		Personnage perP = new Personnage(2, "Paysanne", Sexe.F, Role.Ep, 1, 100, 100, 10, 5, 5, 10, "img/paysanne.png", 1, 1);
 		Pnj pnj = new Pnj(1, "", true, perP);
@@ -105,7 +106,7 @@ public class GameService {
 		evenementService.update(this.currentEvenement());
 
 		// La méthode d'initialisation renvoie la vue de bienvenue dans le jeu.
-		return welcomeVue();
+		return getVueDeplacementAvecOuSansPnj(martin);
 	}
 
 	/**
@@ -151,7 +152,7 @@ public class GameService {
 			joueur.getPersonnage().setPositionX(newX);
 			joueur.getPersonnage().setPositionY(newY);
 			
-			nouvelleVue = getVueDeplacementAvecOuSansPnj(joueur, newX, newY);
+			nouvelleVue = getVueDeplacementAvecOuSansPnj(joueur);
 			game.setCurrentVue(nouvelleVue);
 			
 			break;
@@ -162,7 +163,7 @@ public class GameService {
 			joueur.getPersonnage().setPositionX(newX);
 			joueur.getPersonnage().setPositionY(newY);
 			
-			nouvelleVue = getVueDeplacementAvecOuSansPnj(joueur, newX, newY);
+			nouvelleVue = getVueDeplacementAvecOuSansPnj(joueur);
 			game.setCurrentVue(nouvelleVue);
 			
 			break;
@@ -173,7 +174,7 @@ public class GameService {
 			joueur.getPersonnage().setPositionX(newX);
 			joueur.getPersonnage().setPositionY(newY);
 			
-			nouvelleVue = getVueDeplacementAvecOuSansPnj(joueur, newX, newY);
+			nouvelleVue = getVueDeplacementAvecOuSansPnj(joueur);
 			game.setCurrentVue(nouvelleVue);
 			
 			break;
@@ -184,7 +185,7 @@ public class GameService {
 			joueur.getPersonnage().setPositionX(newX);
 			joueur.getPersonnage().setPositionY(newY);
 			
-			nouvelleVue = getVueDeplacementAvecOuSansPnj(joueur, newX, newY);
+			nouvelleVue = getVueDeplacementAvecOuSansPnj(joueur);
 			game.setCurrentVue(nouvelleVue);
 
 			break;
@@ -254,45 +255,24 @@ public class GameService {
 	}
 	
 	/**
-	 * Méthode pour récupérer le chemin d'accès à l'image d'un background pour le jeu
-	 * @param newStringLieu
-	 * @return
-	 */
-	public String getNewBackground(String newStringLieu) {
-		String newBackground = "";
-		switch (newStringLieu) {
-		case "Foret":
-			newBackground = "img/bg_foret.png";
-			break;
-		case "Montagne":
-			newBackground = "img/bg_montagne.png";
-			break;
-		case "Volcan":
-			newBackground = "img/bg_volcan.png";
-			break;
-		case "Village":
-			newBackground = "img/bg_village.png";
-			break;
-		case "Plage":
-			newBackground = "img/bg_plage.png";
-			break;
-		}
-		return newBackground;
-	}
-	
-	/**
 	 * Méthode pour récupérer le Pnj présent (ou non) à un lieu donné
 	 * @param positionX
 	 * @param positionY
 	 * @return
 	 */
-	public Vue getVueDeplacementAvecOuSansPnj(Joueur joueur, int positionX, int positionY){
+	public Vue getVueDeplacementAvecOuSansPnj(Joueur joueur){
+		int positionX = joueur.getPersonnage().getPositionX();
+		int positionY = joueur.getPersonnage().getPositionY();
+		
 		Pnj pnjPresent = pnjService.findByLieu(positionX, positionY);
 		
 		String newStringLieu = carte.getMaCarte()[positionX][positionY];
-		String newBackground = getNewBackground(newStringLieu);
 		
-		String welcomeNewLieu = "";
+		Lieu newLieu = new Lieu(newStringLieu);
+		
+		String newBackground = newLieu.getBackground();
+		
+		String welcomeNewLieu = newLieu.getTexteAccueil();
 		
 		if (pnjPresent != null) {
 			Vue nouvelleVue = new VueDeplacement(newBackground, welcomeNewLieu, joueur, pnjPresent, carte);

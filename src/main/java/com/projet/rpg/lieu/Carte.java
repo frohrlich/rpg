@@ -1,4 +1,4 @@
-package com.projet.rpg.lieux;
+package com.projet.rpg.lieu;
 
 import org.springframework.stereotype.Component;
 

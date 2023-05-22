@@ -2,7 +2,7 @@ package com.projet.rpg.vue;
 
 import org.springframework.stereotype.Component;
 
-import com.projet.rpg.lieux.Carte;
+import com.projet.rpg.lieu.Carte;
 import com.projet.rpg.personnage.joueur.Joueur;
 import com.projet.rpg.personnage.pnj.Pnj;
 
@@ -26,6 +26,7 @@ public class VueDeplacement extends VueAvecPnj {
 	//constructeur sans Pnj
 	
 	public VueDeplacement(String background, String texte, Joueur joueur, Carte carte) {
+		super(background, texte, joueur, null);
 		this.carte = carte;
 	}
 	
