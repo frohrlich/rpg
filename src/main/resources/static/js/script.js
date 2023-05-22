@@ -382,7 +382,6 @@ function update(vueInfo) {
 				   ["Plage", "Plage", "Plage"]];
 
 	myMap.charPosX = vueInfo.joueur.personnage.positionX;
-	console.log("blabla");
 	myMap.charPosY = vueInfo.joueur.personnage.positionY;
 
 	// if not already at left border of the map
@@ -432,7 +431,7 @@ function update(vueInfo) {
 	}
 
 	// if pnj present on current view we show its infobox
-	if (Object.hasOwn(vueInfo, 'pnj')) {
+	if (Object.hasOwn(vueInfo, 'pnj') && vueInfo.pnj != null) {
 		myPnjInfo.hidden = false;
 		myLeftMoveArrow.hidden = true;
 		myDownMoveArrow.hidden = true;
