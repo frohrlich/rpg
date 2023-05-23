@@ -19,13 +19,13 @@ public class Carte {
 		this.maCarte = maCarte;
 	}
 
-	public void affiche() {
-		for (int i = 0; i < maCarte.length; ++i) {
-			System.out.println();
-			for (int j = 0; j < maCarte[i].length; ++j) {
-				System.out.print(maCarte[i][j] + " ");
-			}
-		}
-	}
+//	public void affiche() {
+//		for (int i = 0; i < maCarte.length; ++i) {
+//			System.out.println();
+//			for (int j = 0; j < maCarte[i].length; ++j) {
+//				System.out.print(maCarte[i][j] + " ");
+//			}
+//		}
+//	}
 
 }

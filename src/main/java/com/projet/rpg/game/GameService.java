@@ -35,11 +35,6 @@ public class GameService {
 	private VueService vueService;
 	
 
-	// A revoir ultérieurement
-	private Carte carte;
-	
-	//
-
 	public GameService(Game game, JoueurService joueurService, PnjService pnjService,
 			EvenementService evenementService, VueService vueService) {
 		this.game = game;
@@ -70,7 +65,9 @@ public class GameService {
 											  {"Volcan", "Village", "Foret"},
 											  {"Plage", "Plage", "Plage"}};
 		
-		carte = new Carte(maCarte);
+		game.setCarte(new Carte(maCarte));
+		
+		
 		
 		game.setEtape(0);
 		
@@ -88,6 +85,8 @@ public class GameService {
 
 		// Initialisation du joueur dans le jeu.
 		game.setCurrentJoueur(martin);
+		
+		updateCurrentLieu();
 
 		// Création d'un dialogue pour le PNJ.
 		String dialoguePnj = PnjService.dialogueCreation(
@@ -108,7 +107,7 @@ public class GameService {
 		evenementService.update(this.currentEvenement());
 
 		// La méthode d'initialisation renvoie la vue de bienvenue dans le jeu.
-		return getVueDeplacementAvecOuSansPnj(martin);
+		return getVueDeplacementAvecOuSansPnj();
 	}
 
 	/**
@@ -126,12 +125,6 @@ public class GameService {
 		
 		Joueur joueur = game.getCurrentJoueur();
 		
-		int currentX = joueur.getPersonnage().getPositionX();
-		int currentY = joueur.getPersonnage().getPositionY();
-		
-		int newX;
-		int newY;
-
 		// then act depending on option clicked
 		switch (strClick) {
 		case "option1":
@@ -149,25 +142,25 @@ public class GameService {
 
 		case "flecheN": // si on n'est ni dans un combat, ni dans un dialogue etc... On est en déplacement
 			deplacementJoueur(joueur, 0, -1);
-			nouvelleVue = getVueDeplacementAvecOuSansPnj(joueur);
+			nouvelleVue = getVueDeplacementAvecOuSansPnj();
 			game.setCurrentVue(nouvelleVue);
 			
 			break;
 		case "flecheS":
 			deplacementJoueur(joueur, 0, 1);
-			nouvelleVue = getVueDeplacementAvecOuSansPnj(joueur);
+			nouvelleVue = getVueDeplacementAvecOuSansPnj();
 			game.setCurrentVue(nouvelleVue);
 			
 			break;
 		case "flecheO":
 			deplacementJoueur(joueur, -1, 0);
-			nouvelleVue = getVueDeplacementAvecOuSansPnj(joueur);
+			nouvelleVue = getVueDeplacementAvecOuSansPnj();
 			game.setCurrentVue(nouvelleVue);
 			
 			break;
 		case "flecheE":
 			deplacementJoueur(joueur, 1, 0);
-			nouvelleVue = getVueDeplacementAvecOuSansPnj(joueur);
+			nouvelleVue = getVueDeplacementAvecOuSansPnj();
 			game.setCurrentVue(nouvelleVue);
 
 			break;
@@ -217,10 +210,14 @@ public class GameService {
 	 * @return
 	 */
 	public List<Evenement> generateMeeting(Pnj pnj) {
+		updateCurrentLieu();
+
 		List<Evenement> meeting = new ArrayList<Evenement>();
+		
+		String currentBackground = game.getCurrentLieu().getBackground();
 
 		// Instanciation d'un événement de type dialogue
-		EvenementDialogue evenementDialogue = new EvenementDialogue("img/bg_foret.png", 0, game.getCurrentJoueur(),
+		EvenementDialogue evenementDialogue = new EvenementDialogue(currentBackground, 0, game.getCurrentJoueur(),
 				pnj);
 		// Ajout de l'événement de type dialogue dans le jeu
 		meeting.add(evenementDialogue);
@@ -228,8 +225,9 @@ public class GameService {
 		// Dans le cas où le Pnj est hostile
 		if (pnj.isHostile()) {
 			// Création de l'événement combat qui suivra le dialogue
-			EvenementCombat evenementCombat = new EvenementCombat("img/bg_volcan.png", pnj.getPersonnage().getArgent(),
+			EvenementCombat evenementCombat = new EvenementCombat(currentBackground, pnj.getPersonnage().getArgent(),
 					game.getCurrentJoueur(), pnj);
+			System.out.println(currentBackground);
 			meeting.add(evenementCombat);
 		}
 
@@ -248,6 +246,8 @@ public class GameService {
 		
 		joueur.getPersonnage().setPositionX(currentX + deltaX);
 		joueur.getPersonnage().setPositionY(currentY + deltaY);
+		
+		game.setCurrentJoueur(joueur);
 	}
 	
 	/**
@@ -256,33 +256,39 @@ public class GameService {
 	 * @param positionY
 	 * @return
 	 */
-	public Vue getVueDeplacementAvecOuSansPnj(Joueur joueur){
-		int positionX = joueur.getPersonnage().getPositionX();
-		int positionY = joueur.getPersonnage().getPositionY();
-		
-		System.out.println("blabla");
+	public Vue getVueDeplacementAvecOuSansPnj(){
+		updateCurrentLieu();
+
+		int positionX = game.getCurrentJoueur().getPersonnage().getPositionX();
+		int positionY = game.getCurrentJoueur().getPersonnage().getPositionY();
 		
 		Pnj pnjPresent = pnjService.findByLieu(positionX, positionY);
-		System.out.println(pnjPresent);
 		
-		String newStringLieu = carte.getMaCarte()[positionY][positionX];
+		String newBackground = game.getCurrentLieu().getBackground();
 		
-		Lieu newLieu = new Lieu(newStringLieu);
-		
-		String newBackground = newLieu.getBackground();
-		
-		String welcomeNewLieu = newLieu.getTexteAccueil();
+		String welcomeNewLieu = game.getCurrentLieu().getTexteAccueil();
 		
 		if (pnjPresent != null) {
-			Vue nouvelleVue = new VueDeplacement(newBackground, welcomeNewLieu, joueur, pnjPresent, carte);
+			Vue nouvelleVue = new VueDeplacement(newBackground, welcomeNewLieu, game.getCurrentJoueur(), pnjPresent, game.getCarte());
 			Option option = new Option("Parler avec " + pnjPresent.getPersonnage().getNom());
 			vueService.update(nouvelleVue);
 			vueService.addOption(option);
 			return nouvelleVue;
 		} else {
-			Vue nouvelleVue = new VueDeplacement(newBackground, welcomeNewLieu, joueur, carte);
+			Vue nouvelleVue = new VueDeplacement(newBackground, welcomeNewLieu, game.getCurrentJoueur(), game.getCarte());
 			return nouvelleVue;
 		}
+	}
+	
+	public void updateCurrentLieu() {
+		int positionX = game.getCurrentJoueur().getPersonnage().getPositionX();
+		int positionY = game.getCurrentJoueur().getPersonnage().getPositionY();
+				
+		String newStringLieu = game.getCarte().getMaCarte()[positionY][positionX];
+		
+		Lieu newLieu = new Lieu(newStringLieu);
+		
+		game.setCurrentLieu(newLieu);
 	}
 	
 }
