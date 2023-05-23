@@ -17,6 +17,10 @@ public class EvenementService {
 		this.currentState = "";
 	}
 
+	/**
+	 * Génération de la prochaine vue.
+	 * @return
+	 */
 	public Vue nextVue() {
 		Vue returnedVue = null;
 		if (currentState.equals("combat")) {
@@ -26,7 +30,11 @@ public class EvenementService {
 		}
 		return returnedVue;
 	}
-
+	
+	/**
+	 * Mide à jour d'un événement.
+	 * @param evenement
+	 */
 	public void update(Evenement evenement) {
 		if (evenement instanceof EvenementCombat) {
 			evenementCombatService.update(evenement);

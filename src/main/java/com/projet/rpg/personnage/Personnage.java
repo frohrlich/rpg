@@ -1,5 +1,9 @@
 package com.projet.rpg.personnage;
 
+/**
+ * "Fausse" classe mère de 'Joueur' et de 'Pnj'
+ */
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -58,6 +62,12 @@ public class Personnage {
 	
 	@Column(nullable = false)
 	private String apparence;
+	
+	@Column(nullable = false)
+	private int positionX;
+	
+	@Column(nullable = false)
+	private int positionY;
 	
 //	@JsonIgnore
 //	@OneToOne(mappedBy = "personnage")

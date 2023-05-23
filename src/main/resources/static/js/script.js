@@ -2,8 +2,10 @@
  * Canvas game script
  */
 
-let testCharPosX = 0;
-let testCharPosY = 0;
+// ______Définition de la "boîte" dans laquelle le jeu est affiché______
+
+// let testCharPosX = 0;
+// let testCharPosY = 0;
 
 // move arrows size
 let arrowSize = 60;
@@ -18,10 +20,14 @@ let previousVue = null;
 
 let interfacePosY = 300; // y position of interface
 
-let charStartPosX = 130; // starting x position for character
-let charStartPosY = 130; // starting y position for character
-let pnjStartPosX = canvasWidth - 140; // starting x position for pnj
-let pnjStartPosY = 130; // starting y position for pnj
+// Position de départ du joueur
+let charStartPosX = 130; // selon l'axe x
+let charStartPosY = 130; // selon l'axe y
+
+// Position de départ du pnj
+let pnjStartPosX = canvasWidth - 140; // selon l'axe x
+let pnjStartPosY = 130; // selon l'axe y
+
 let limitMovementX = 10; // moving space for character animation
 let directionChar = 1,
 	directionPnj = -1; // starting moving direction 1 right, -1 left
@@ -150,7 +156,7 @@ function startGame() {
 		0,
 		"img/down-arrow.png",
 		canvasWidth / 2 - arrowSize / 2,
-		interfacePosY-50,
+		interfacePosY - 50,
 		"image",
 		"",
 		hidden = true
@@ -262,7 +268,7 @@ function component(width, height, colorImage, x, y, type, text = null, hidden = 
 	this.clicked = function() {
 		// first check if hidden
 		// if so, can't be clicked
-		if(this.hidden) {
+		if (this.hidden) {
 			return false;
 		}
 		var myleft = this.x;
@@ -331,19 +337,15 @@ function updateGameArea(timestamp) {
 			sendClick("option3");
 		}
 		else if (myLeftMoveArrow.clicked()) {
-			testCharPosX--;
 			sendClick("flecheO");
 		}
 		else if (myRightMoveArrow.clicked()) {
-			testCharPosX++;
 			sendClick("flecheE");
 		}
 		else if (myUpMoveArrow.clicked()) {
-			testCharPosY--;
 			sendClick("flecheN");
 		}
 		else if (myDownMoveArrow.clicked()) {
-			testCharPosY++;
 			sendClick("flecheS");
 		}
 		myGameArea.x = 0; // reset click position
@@ -371,39 +373,48 @@ function updateGameArea(timestamp) {
 // updates view with response from server
 function update(vueInfo) {
 
-	let testMap = [["Foret", "Foret", "Montagne"],
-				   ["Volcan", "Village", "Foret"],
-				   ["Plage", "Plage", "Plage"]];
+	// everything hidden by default
+	myLeftMoveArrow.hidden = true;
+	myDownMoveArrow.hidden = true;
+	myUpMoveArrow.hidden = true;
+	myRightMoveArrow.hidden = true;
+	myMap.hidden = true;
+	myPnj.hidden = true;
+	myPnjInfo.hidden = true;
 
-	myMap.charPosX = testCharPosX;
-	myMap.charPosY = testCharPosY;
+	// we show map if present in view
+	if (Object.hasOwn(vueInfo, 'carte')) {
+		myMap.mapInfo = vueInfo.carte.maCarte;
+		myMap.charPosX = vueInfo.joueur.personnage.positionX;
+		myMap.charPosY = vueInfo.joueur.personnage.positionY;
 
-	// if not already at left border of the map
-	if (myMap.charPosX != 0) {
-		// then show left move arrow
-		myLeftMoveArrow.hidden = false;
-	} else {
-		myLeftMoveArrow.hidden = true;
-	}
-	// same for right side of the map
-	if (myMap.charPosX != testMap.length - 1) {
-		myRightMoveArrow.hidden = false;
-	} else {
-		myRightMoveArrow.hidden = true;
-	}
-	if (myMap.charPosY != 0) {
-		myUpMoveArrow.hidden = false;
-	} else {
-		myUpMoveArrow.hidden = true;
-	}
-	if (myMap.charPosY != testMap[0].length - 1) {
-		myDownMoveArrow.hidden = false;
-	} else {
-		myDownMoveArrow.hidden = true;
+		// if not already at left border of the map
+		if (myMap.charPosX != 0) {
+			// then show left move arrow
+			myLeftMoveArrow.hidden = false;
+		} else {
+			myLeftMoveArrow.hidden = true;
+		}
+		// same for right side of the map
+		if (myMap.charPosX != myMap.mapInfo.length - 1) {
+			myRightMoveArrow.hidden = false;
+		} else {
+			myRightMoveArrow.hidden = true;
+		}
+		if (myMap.charPosY != 0) {
+			myUpMoveArrow.hidden = false;
+		} else {
+			myUpMoveArrow.hidden = true;
+		}
+		if (myMap.charPosY != myMap.mapInfo[0].length - 1) {
+			myDownMoveArrow.hidden = false;
+		} else {
+			myDownMoveArrow.hidden = true;
+		}
+
+		myMap.hidden = false;
 	}
 
-	myMap.mapInfo = testMap;
-	myMap.hidden = false;
 
 	// if player present on current view we show its infobox
 	if (Object.hasOwn(vueInfo, 'joueur')) {
@@ -425,31 +436,35 @@ function update(vueInfo) {
 	}
 
 	// if pnj present on current view we show its infobox
-	if (Object.hasOwn(vueInfo, 'pnj')) {
-		myPnjInfo.hidden = false;
-		myLeftMoveArrow.hidden = true;
-		myDownMoveArrow.hidden = true;
-		myUpMoveArrow.hidden = true;
-		myRightMoveArrow.hidden = true;
-		myMap.hidden = true; // hide map if pnj present
+	if (Object.hasOwn(vueInfo, 'pnj') && vueInfo.pnj != null) {
 		myPnjInfo.text = vueInfo.pnj.personnage.nom
 			+ "      niveau " + vueInfo.pnj.personnage.niveau
 			+ "     " + Math.max(vueInfo.pnj.personnage.pv, 0) + "/"
 			+ vueInfo.pnj.personnage.pvMax + " pv";
 		// if pnj image different from previous view we refresh the image
-		if (previousVue === null || !Object.hasOwn(previousVue, 'pnj') || (previousVue.pnj.personnage.apparence != vueInfo.pnj.personnage.apparence)) {
+		if (previousVue === null || !Object.hasOwn(previousVue, 'pnj') || previousVue.pnj == null || (previousVue.pnj.personnage.apparence != vueInfo.pnj.personnage.apparence)) {
 			myPnj = new component(
 				0,
 				0,
 				vueInfo.pnj.personnage.apparence,
 				myPnj.x,
 				myPnj.y,
-				"image"
+				"image",
 			);
 		}
 	} else {
 		// if pnj not present, we hide its infobox
+		myPnj.hidden = true;
 		myPnjInfo.hidden = true;
+	}
+
+	// hide pnj info and image if in move view
+	if (myMap.hidden == false) {
+		myPnj.hidden = true;
+		myPnjInfo.hidden = true;
+	} else {
+		myPnj.hidden = false;
+		myPnjInfo.hidden = false;		
 	}
 
 	// same for background : refresh only if changed
@@ -505,7 +520,7 @@ function drawTextBox(ctx, text, posX, posY, tailleX, tailleY, color) {
 	ctx.lineWidth = 1;
 	rectArrondi(ctx, posX, posY, tailleX, tailleY, 5);
 	ctx.font = textfontSize + "px serif";
-	let lines = getLines(ctx, text, tailleX);
+	let lines = getLines(ctx, text, tailleX - 10);
 	ctx.fillStyle = color; // text color
 	for (let i = 0; i < lines.length; i++) {
 		ctx.fillText(lines[i], posX + 5, posY + textfontSize * (i + 1));

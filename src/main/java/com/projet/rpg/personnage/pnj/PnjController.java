@@ -33,6 +33,11 @@ public class PnjController {
 		return pnjService.findById(id);
 	}
 	
+	@GetMapping("{positionX}, {positionY}")
+	public Pnj findByLieu(@PathVariable int positionX, @PathVariable int positionY) {
+		return pnjService.findByLieu(positionX, positionY);
+	}
+	
 	@PostMapping
 	public void save(@RequestBody Pnj pnj) {
 		pnjService.save(pnj);
