@@ -439,7 +439,7 @@ function update(vueInfo) {
 			+ "     " + Math.max(vueInfo.pnj.personnage.pv, 0) + "/"
 			+ vueInfo.pnj.personnage.pvMax + " pv";
 		// if pnj image different from previous view we refresh the image
-		if (previousVue === null || !Object.hasOwn(previousVue, 'pnj') || (previousVue.pnj.personnage.apparence != vueInfo.pnj.personnage.apparence)) {
+		if (previousVue === null || !Object.hasOwn(previousVue, 'pnj') || previousVue.pnj == null || (previousVue.pnj.personnage.apparence != vueInfo.pnj.personnage.apparence)) {
 			myPnj = new component(
 				0,
 				0,

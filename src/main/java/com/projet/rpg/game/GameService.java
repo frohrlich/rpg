@@ -148,45 +148,25 @@ public class GameService {
 			break;
 
 		case "flecheN": // si on n'est ni dans un combat, ni dans un dialogue etc... On est en déplacement
-			newX = currentX;
-			newY = currentY - 1;
-			
-			joueur.getPersonnage().setPositionX(newX);
-			joueur.getPersonnage().setPositionY(newY);
-			
+			deplacementJoueur(joueur, 0, -1);
 			nouvelleVue = getVueDeplacementAvecOuSansPnj(joueur);
 			game.setCurrentVue(nouvelleVue);
 			
 			break;
 		case "flecheS":
-			newX = currentX;
-			newY = currentY + 1;
-			
-			joueur.getPersonnage().setPositionX(newX);
-			joueur.getPersonnage().setPositionY(newY);
-			
+			deplacementJoueur(joueur, 0, 1);
 			nouvelleVue = getVueDeplacementAvecOuSansPnj(joueur);
 			game.setCurrentVue(nouvelleVue);
 			
 			break;
 		case "flecheO":
-			newX = currentX - 1;
-			newY = currentY;
-			
-			joueur.getPersonnage().setPositionX(newX);
-			joueur.getPersonnage().setPositionY(newY);
-			
+			deplacementJoueur(joueur, -1, 0);
 			nouvelleVue = getVueDeplacementAvecOuSansPnj(joueur);
 			game.setCurrentVue(nouvelleVue);
 			
 			break;
 		case "flecheE":
-			newX = currentX + 1;
-			newY = currentY;
-			
-			joueur.getPersonnage().setPositionX(newX);
-			joueur.getPersonnage().setPositionY(newY);
-			
+			deplacementJoueur(joueur, 1, 0);
 			nouvelleVue = getVueDeplacementAvecOuSansPnj(joueur);
 			game.setCurrentVue(nouvelleVue);
 
@@ -257,6 +237,20 @@ public class GameService {
 	}
 	
 	/**
+	 * Méthode pour déplacer le joueur sur la carte
+	 * @param joueur
+	 * @param deltaX
+	 * @param deltaY
+	 */
+	public void deplacementJoueur(Joueur joueur, int deltaX, int deltaY) {
+		int currentX = joueur.getPersonnage().getPositionX();
+		int currentY = joueur.getPersonnage().getPositionY();
+		
+		joueur.getPersonnage().setPositionX(currentX + deltaX);
+		joueur.getPersonnage().setPositionY(currentY + deltaY);
+	}
+	
+	/**
 	 * Méthode pour récupérer le Pnj présent (ou non) à un lieu donné
 	 * @param positionX
 	 * @param positionY
@@ -266,7 +260,10 @@ public class GameService {
 		int positionX = joueur.getPersonnage().getPositionX();
 		int positionY = joueur.getPersonnage().getPositionY();
 		
+		System.out.println("blabla");
+		
 		Pnj pnjPresent = pnjService.findByLieu(positionX, positionY);
+		System.out.println(pnjPresent);
 		
 		String newStringLieu = carte.getMaCarte()[positionY][positionX];
 		
@@ -278,6 +275,9 @@ public class GameService {
 		
 		if (pnjPresent != null) {
 			Vue nouvelleVue = new VueDeplacement(newBackground, welcomeNewLieu, joueur, pnjPresent, carte);
+			Option option = new Option("Parler avec " + pnjPresent.getPersonnage().getNom());
+			vueService.update(nouvelleVue);
+			vueService.addOption(option);
 			return nouvelleVue;
 		} else {
 			Vue nouvelleVue = new VueDeplacement(newBackground, welcomeNewLieu, joueur, carte);

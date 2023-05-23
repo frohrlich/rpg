@@ -44,7 +44,7 @@ public class PnjService {
 	 * @return
 	 */
 	public Pnj findByLieu(int positionX, int positionY) {
-		return pnjRepository.findByLieu(positionX, positionY);
+		return pnjRepository.findByPersonnagePositionXAndPersonnagePositionY(positionX, positionY);
 	}
 	
 	/**
