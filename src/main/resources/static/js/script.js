@@ -428,6 +428,7 @@ function update(vueInfo) {
 
 	// if pnj present on current view we show its infobox
 	if (Object.hasOwn(vueInfo, 'pnj') && vueInfo.pnj != null) {
+		myPnj.hidden = false;
 		myPnjInfo.hidden = false;
 		myLeftMoveArrow.hidden = true;
 		myDownMoveArrow.hidden = true;
@@ -451,6 +452,7 @@ function update(vueInfo) {
 		}
 	} else {
 		// if pnj not present, we hide its infobox
+		myPnj.hidden = true;
 		myPnjInfo.hidden = true;
 	}
 

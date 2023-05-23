@@ -125,6 +125,7 @@ public class PersonnageService {
 	 */
 	public void blesse(Personnage cible, int degats) {
 		cible.setPv(cible.getPv() - degats);
+		this.save(cible);
 	}
 	
 	/**

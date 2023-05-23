@@ -13,6 +13,7 @@ import com.projet.rpg.evenement.EvenementService;
 import com.projet.rpg.lieu.Carte;
 import com.projet.rpg.lieu.Lieu;
 import com.projet.rpg.personnage.Personnage;
+import com.projet.rpg.personnage.PersonnageService;
 import com.projet.rpg.personnage.Role;
 import com.projet.rpg.personnage.Sexe;
 import com.projet.rpg.personnage.joueur.Joueur;
@@ -30,15 +31,16 @@ public class GameService {
 	private Game game;
 
 	private JoueurService joueurService;
+	private PersonnageService personnageService;
 	private PnjService pnjService;
 	private EvenementService evenementService;
 	private VueService vueService;
 	
-
-	public GameService(Game game, JoueurService joueurService, PnjService pnjService,
+	public GameService(Game game, JoueurService joueurService, PersonnageService personnageService, PnjService pnjService,
 			EvenementService evenementService, VueService vueService) {
 		this.game = game;
 		this.joueurService = joueurService;
+		this.personnageService = personnageService;
 		this.pnjService = pnjService;
 		this.evenementService = evenementService;
 		this.vueService = vueService;
@@ -53,6 +55,15 @@ public class GameService {
 		Vue myVue = new Vue("img/bg_foret.png", currentTexte, game.getCurrentJoueur());
 		vueService.update(myVue);
 		vueService.addOption(new Option("Commencer l'aventure"));
+		return myVue;
+	}
+	
+	public Vue gameOverVue() {
+		String currentTexte = "Vous avez perdu.";
+		String background = game.getCurrentLieu().getBackground();
+		
+		Vue myVue = new Vue(background, currentTexte, game.getCurrentJoueur());
+		vueService.update(myVue);
 		return myVue;
 	}
 
@@ -98,14 +109,6 @@ public class GameService {
 		// Update du PNJ dans la BDD, maintenant avec son dialogue.
 		pnjService.save(pnj);
 
-		// Génération de l'événement de rencontre avec le PNJ :
-		// Si le pnj est hostile, la rencontre sera un événement Dialogue suivi d'un Combat ;
-		// S'il ne l'est pas, la rencontre sera seulement un événement de type Dialogue.
-		game.setEvenements(generateMeeting(pnj));
-
-		// L'événement est ensuite donné au service
-		evenementService.update(this.currentEvenement());
-
 		// La méthode d'initialisation renvoie la vue de bienvenue dans le jeu.
 		return getVueDeplacementAvecOuSansPnj();
 	}
@@ -116,14 +119,19 @@ public class GameService {
 	 * @return
 	 */
 	public Vue update(String message) {
-
+		Joueur joueur = game.getCurrentJoueur();
+		
+		// if player is dead, return game over view and do nothing
+		if(personnageService.isDead(joueur.getPersonnage())) {
+			return gameOverVue();
+		}
+		
 		Vue nouvelleVue = null;
 
 		// parse JSON received from client
 		JSONObject obj = new JSONObject(message);
 		String strClick = obj.getString("click");
 		
-		Joueur joueur = game.getCurrentJoueur();
 		
 		// then act depending on option clicked
 		switch (strClick) {
@@ -137,29 +145,31 @@ public class GameService {
 				// we can go to the next event in the list
 				nouvelleVue = evenementService.nextVue();
 				game.setCurrentVue(nouvelleVue);
+			} else {
+				nouvelleVue = getVueDeplacementAvecOuSansPnj();
+				game.setCurrentVue(nouvelleVue);
 			}
 			break;
-
 		case "flecheN": // si on n'est ni dans un combat, ni dans un dialogue etc... On est en déplacement
-			deplacementJoueur(joueur, 0, -1);
+			deplacementJoueur(0, -1);
 			nouvelleVue = getVueDeplacementAvecOuSansPnj();
 			game.setCurrentVue(nouvelleVue);
 			
 			break;
 		case "flecheS":
-			deplacementJoueur(joueur, 0, 1);
+			deplacementJoueur(0, 1);
 			nouvelleVue = getVueDeplacementAvecOuSansPnj();
 			game.setCurrentVue(nouvelleVue);
 			
 			break;
 		case "flecheO":
-			deplacementJoueur(joueur, -1, 0);
+			deplacementJoueur(-1, 0);
 			nouvelleVue = getVueDeplacementAvecOuSansPnj();
 			game.setCurrentVue(nouvelleVue);
 			
 			break;
 		case "flecheE":
-			deplacementJoueur(joueur, 1, 0);
+			deplacementJoueur(1, 0);
 			nouvelleVue = getVueDeplacementAvecOuSansPnj();
 			game.setCurrentVue(nouvelleVue);
 
@@ -227,7 +237,6 @@ public class GameService {
 			// Création de l'événement combat qui suivra le dialogue
 			EvenementCombat evenementCombat = new EvenementCombat(currentBackground, pnj.getPersonnage().getArgent(),
 					game.getCurrentJoueur(), pnj);
-			System.out.println(currentBackground);
 			meeting.add(evenementCombat);
 		}
 
@@ -240,7 +249,9 @@ public class GameService {
 	 * @param deltaX
 	 * @param deltaY
 	 */
-	public void deplacementJoueur(Joueur joueur, int deltaX, int deltaY) {
+	public void deplacementJoueur(int deltaX, int deltaY) {
+		Joueur joueur = game.getCurrentJoueur();
+		
 		int currentX = joueur.getPersonnage().getPositionX();
 		int currentY = joueur.getPersonnage().getPositionY();
 		
@@ -268,11 +279,20 @@ public class GameService {
 		
 		String welcomeNewLieu = game.getCurrentLieu().getTexteAccueil();
 		
-		if (pnjPresent != null) {
+		if (pnjPresent != null && !personnageService.isDead(pnjPresent.getPersonnage())) {
 			Vue nouvelleVue = new VueDeplacement(newBackground, welcomeNewLieu, game.getCurrentJoueur(), pnjPresent, game.getCarte());
 			Option option = new Option("Parler avec " + pnjPresent.getPersonnage().getNom());
 			vueService.update(nouvelleVue);
 			vueService.addOption(option);
+			
+			// Génération de l'événement de rencontre avec le PNJ :
+			// Si le pnj est hostile, la rencontre sera un événement Dialogue suivi d'un Combat ;
+			// S'il ne l'est pas, la rencontre sera seulement un événement de type Dialogue.
+			game.setEvenements(generateMeeting(pnjPresent));
+
+			// L'événement est ensuite donné au service
+			evenementService.update(this.currentEvenement());
+			
 			return nouvelleVue;
 		} else {
 			Vue nouvelleVue = new VueDeplacement(newBackground, welcomeNewLieu, game.getCurrentJoueur(), game.getCarte());
