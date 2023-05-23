@@ -89,8 +89,6 @@ public class GameService {
 		// Création des personnages à la main pour tester.
 		Personnage perJ = new Personnage(1, "Martin", Sexe.M, Role.Ep, 1, 100, 100, 12, 5, 5, 10, "img/epeisteM.png", 1, 1);
 		Joueur martin = new Joueur(1, 1000, perJ);
-		Personnage perP = new Personnage(2, "Paysanne", Sexe.F, Role.Ep, 1, 100, 100, 10, 5, 5, 10, "img/paysanne.png", 1, 2);
-		Pnj pnj = new Pnj(1, "", true, perP);
 
 		joueurService.save(martin);
 
@@ -99,15 +97,29 @@ public class GameService {
 		
 		updateCurrentLieu();
 
+		// ______ Création de la paysanne ______
+		Personnage perPaysanne = new Personnage(2, "Paysanne", Sexe.F, Role.Ep, 1, 25, 25, 10, 5, 5, 10, "img/paysanne.png", 1, 2);
+		Pnj paysanne = new Pnj(1, "", false, perPaysanne);
+		
 		// Création d'un dialogue pour le PNJ.
-		String dialoguePnj = PnjService.dialogueCreation(
-				new String[] { "Coucou je serai ta rivale !", "Prépare toi à m'affronter.", "C'est parti !" }, 10, 0
+		String dialoguePaysanne = PnjService.dialogueCreation(
+				new String[] { "Belle journée ensoleillée n'est-ce pas !", "Je piquerais bien une tête.", "Que la vie est belle ma foi." }, 10, 0
 				);
 		// Assignation du dialogue au PNJ.
-		pnj.setDialogue(dialoguePnj);
-
+		paysanne.setDialogue(dialoguePaysanne);
+		
 		// Update du PNJ dans la BDD, maintenant avec son dialogue.
-		pnjService.save(pnj);
+		pnjService.save(paysanne);
+		
+		// ______ Création de le ours ______
+		Personnage perOurs = new Personnage(3, "Le Ours", Sexe.M, Role.Ma, 1, 30, 30, 10, 5, 5, 10, "img/le_ours.png", 0, 0);
+		Pnj ours = new Pnj(2, "", true, perOurs);
+		String dialogueOurs = PnjService.dialogueCreation(
+				new String[] { "Grrr !" }, 10, 0
+				);
+		ours.setDialogue(dialogueOurs);		
+		
+		pnjService.save(ours);
 
 		// La méthode d'initialisation renvoie la vue de bienvenue dans le jeu.
 		return getVueDeplacementAvecOuSansPnj();
@@ -289,6 +301,7 @@ public class GameService {
 			// Si le pnj est hostile, la rencontre sera un événement Dialogue suivi d'un Combat ;
 			// S'il ne l'est pas, la rencontre sera seulement un événement de type Dialogue.
 			game.setEvenements(generateMeeting(pnjPresent));
+			game.setEtape(0);
 
 			// L'événement est ensuite donné au service
 			evenementService.update(this.currentEvenement());
