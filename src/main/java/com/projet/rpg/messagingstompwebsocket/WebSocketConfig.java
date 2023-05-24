@@ -20,6 +20,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 	// this method uses fallbacks in case of websockets not available
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
-		registry.addEndpoint("/gs-guide-websocket").withSockJS();
+		registry.addEndpoint("/gs-guide-websocket")
+		.setAllowedOrigins("http://localhost:4200")
+		.withSockJS();
 	}
 }
