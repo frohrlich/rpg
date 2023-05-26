@@ -1,3 +1,12 @@
+### Projet RPG
+
+Pour lancer le projet :
+```
+mvnw spring-boot:run
+```
+
+Puis y accéder via http://localhost:8080
+
 ## Commandes utiles
 
 Pour commit sa progression :
