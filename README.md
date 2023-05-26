@@ -65,4 +65,3 @@ git branch -d nomdelafonctionnalite
 git push
 git push origin --delete nomdelafonctionnalite
 ```
-
